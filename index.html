@@ -5,235 +5,478 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projects Tracker — Supermall</title>
 <style>
-  :root {
-    --bg: #0f1226;
-    --bg-soft: #171a35;
-    --card: #1d2142;
-    --card-hover: #242a52;
-    --line: #2c325e;
-    --text: #eef0ff;
-    --muted: #9aa0d0;
-    --accent: #7c5cff;
-    --accent-2: #18d4c8;
-    --accent-3: #ff7ab6;
-    --green: #3ddc84;
-    --yellow: #ffce4f;
-    --red: #ff6b6b;
-    --blue: #5b9bff;
-    --shadow: 0 10px 40px rgba(0,0,0,.45);
-    --radius: 16px;
-  }
-  [data-theme="light"] {
-    --bg: #f4f5fc;
-    --bg-soft: #ffffff;
-    --card: #ffffff;
-    --card-hover: #f7f8ff;
-    --line: #e6e8f5;
-    --text: #1a1d3a;
-    --muted: #6b7099;
-    --shadow: 0 10px 30px rgba(80,80,140,.15);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 80% -10%, rgba(124,92,255,.18), transparent),
-                radial-gradient(900px 500px at -10% 110%, rgba(24,212,200,.14), transparent),
-                var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 20px 80px; }
+/* ─── Base tokens (Cozy Brew default) ─── */
+:root {
+  --bg:          #fdf6ee;
+  --bg-soft:     #fff9f3;
+  --card:        #ffffff;
+  --card-hover:  #fff9f4;
+  --line:        #f0e4d0;
+  --text:        #3d2b1f;
+  --muted:       #b59a7e;
+  --accent:      #e8722a;
+  --accent-2:    #f4a94a;
+  --accent-3:    #d94f9e;
+  --green:       #5ab85a;
+  --yellow:      #f4bc1c;
+  --red:         #e84c4c;
+  --blue:        #4c8ee8;
+  --shadow-sm:   0 2px 12px rgba(120,70,20,.09);
+  --shadow:      0 8px 32px rgba(120,70,20,.13);
+  --shadow-lg:   0 20px 60px rgba(120,70,20,.18);
+  --radius:      22px;
+  --radius-sm:   14px;
+  --radius-xs:   9px;
+  --stat1-bg: #fff3eb; --stat1-c: #e8722a;
+  --stat2-bg: #edfff3; --stat2-c: #5ab85a;
+  --stat3-bg: #ebf4ff; --stat3-c: #4c8ee8;
+  --stat4-bg: #ffebeb; --stat4-c: #e84c4c;
+}
 
-  /* Header */
-  header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .logo { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; font-size: 22px;
-          background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow); }
-  .brand h1 { font-size: 20px; letter-spacing: .2px; }
-  .brand p { font-size: 13px; color: var(--muted); }
-  .spacer { flex: 1; }
-  .pill { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line);
-          padding: 8px 14px; border-radius: 999px; font-size: 13px; }
-  .pill b { color: var(--accent-2); }
-  .icon-btn { background: var(--card); border: 1px solid var(--line); color: var(--text); width: 40px; height: 40px;
-              border-radius: 12px; cursor: pointer; font-size: 17px; transition: .15s; }
-  .icon-btn:hover { background: var(--card-hover); transform: translateY(-1px); }
+/* ─── Mint Grove ─── */
+body[data-ui="mint"] {
+  --bg:         #f0f7f3;
+  --bg-soft:    #f7fbf9;
+  --card:       #ffffff;
+  --card-hover: #f4faf7;
+  --line:       #c8e8d8;
+  --text:       #1a3a2a;
+  --muted:      #6ab09a;
+  --accent:     #1e9e6e;
+  --accent-2:   #ff7a5c;
+  --accent-3:   #9b77f0;
+  --shadow-sm:  0 2px 12px rgba(20,100,60,.08);
+  --shadow:     0 8px 32px rgba(20,100,60,.12);
+  --shadow-lg:  0 20px 60px rgba(20,100,60,.16);
+  --stat1-bg: #e4f8ef; --stat1-c: #1e9e6e;
+  --stat2-bg: #fff0ed; --stat2-c: #ff7a5c;
+  --stat3-bg: #f0eeff; --stat3-c: #7c5cff;
+  --stat4-bg: #fff8e0; --stat4-c: #c49a00;
+}
 
-  /* Tabs */
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab { background: var(--card); border: 1px solid var(--line); color: var(--muted); padding: 10px 16px;
-         border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; transition: .15s; }
-  .tab:hover { background: var(--card-hover); color: var(--text); }
-  .tab.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border-color: transparent; }
+/* ─── Candy Pop ─── */
+body[data-ui="candy"] {
+  --bg:         #fff5fc;
+  --bg-soft:    #fff0fa;
+  --card:       #ffffff;
+  --card-hover: #ffecf8;
+  --line:       #f0cce6;
+  --text:       #3a1a30;
+  --muted:      #c494cc;
+  --accent:     #d94f9e;
+  --accent-2:   #7c5cff;
+  --accent-3:   #ff7a5c;
+  --shadow-sm:  0 2px 12px rgba(180,60,140,.09);
+  --shadow:     0 8px 32px rgba(180,60,140,.13);
+  --shadow-lg:  0 20px 60px rgba(180,60,140,.18);
+  --stat1-bg: #ffe6f6; --stat1-c: #d94f9e;
+  --stat2-bg: #eeeaff; --stat2-c: #7c5cff;
+  --stat3-bg: #e6fff0; --stat3-c: #3db870;
+  --stat4-bg: #fff5e6; --stat4-c: #e89020;
+}
 
-  .view { display: none; animation: fade .25s ease; }
-  .view.active { display: block; }
-  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* ─── Volt ─── */
+body[data-ui="volt"] {
+  --bg:         #0d0d0d;
+  --bg-soft:    #141414;
+  --card:       #1c1c1c;
+  --card-hover: #232323;
+  --line:       #2e2e2e;
+  --text:       #f0f0f0;
+  --muted:      #666666;
+  --accent:     #c8f400;
+  --accent-2:   #00e8c8;
+  --accent-3:   #ff6bff;
+  --green:      #3ddc84;
+  --yellow:     #ffce4f;
+  --red:        #ff6b6b;
+  --blue:       #5b9bff;
+  --shadow-sm:  0 2px 12px rgba(0,0,0,.5);
+  --shadow:     0 8px 32px rgba(0,0,0,.65);
+  --shadow-lg:  0 20px 60px rgba(0,0,0,.75);
+  --stat1-bg: #1e2900; --stat1-c: #c8f400;
+  --stat2-bg: #001e1a; --stat2-c: #00e8c8;
+  --stat3-bg: #1a0030; --stat3-c: #cc6bff;
+  --stat4-bg: #2a0000; --stat4-c: #ff6b6b;
+}
 
-  /* Stat strip */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
-  .stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
-  .stat .emoji { font-size: 20px; }
-  .stat .big { font-size: 28px; font-weight: 800; margin-top: 6px; }
-  .stat .lbl { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+/* ─── Reset ─── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background .35s, color .35s;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 90px; }
 
-  .section-head { display: flex; align-items: center; gap: 12px; margin: 8px 0 14px; flex-wrap: wrap; }
-  .section-head h2 { font-size: 17px; }
-  .section-head .sub { color: var(--muted); font-size: 13px; }
+/* ─── Header ─── */
+header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.noon-badge {
+  display: flex; align-items: center;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
+}
+.brand-info h1 { font-size: 20px; font-weight: 800; letter-spacing: -.4px; }
+.brand-info p  { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.spacer { flex: 1; }
+.pill {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--card); box-shadow: var(--shadow-sm);
+  padding: 8px 15px; border-radius: 999px; font-size: 13px; font-weight: 600;
+}
+.pill b { color: var(--accent); }
+.icon-btn {
+  background: var(--card); box-shadow: var(--shadow-sm); color: var(--text);
+  width: 42px; height: 42px; border-radius: var(--radius-sm); cursor: pointer;
+  font-size: 18px; border: none; transition: .18s; flex-shrink: 0;
+}
+.icon-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 
-  /* Quick add */
-  .quickadd { display: flex; gap: 8px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--line);
-              padding: 12px; border-radius: var(--radius); margin-bottom: 18px; }
-  input, textarea, select {
-    background: var(--bg-soft); border: 1px solid var(--line); color: var(--text); padding: 11px 13px;
-    border-radius: 11px; font-size: 14px; font-family: inherit; outline: none; transition: .15s;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,255,.18); }
-  .quickadd input[type=text] { flex: 1; min-width: 200px; }
-  textarea { resize: vertical; min-height: 84px; width: 100%; }
+/* ─── Tab bar ─── */
+.tabs {
+  display: inline-flex; gap: 4px;
+  background: var(--card); padding: 5px; border-radius: 999px;
+  box-shadow: var(--shadow-sm); margin-bottom: 26px;
+}
+.tab {
+  background: transparent; border: none; color: var(--muted);
+  padding: 10px 22px; border-radius: 999px; cursor: pointer;
+  font-size: 14px; font-weight: 700; transition: .2s; white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+}
+body[data-ui="volt"] .tab.active { color: #000; }
 
-  .btn { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; border: none;
-         padding: 11px 18px; border-radius: 11px; cursor: pointer; font-size: 14px; font-weight: 700; transition: .15s; }
-  .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(124,92,255,.35); }
-  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
-  .btn.ghost:hover { background: var(--card-hover); box-shadow: none; }
-  .btn.sm { padding: 7px 12px; font-size: 12.5px; }
+.view { display: none; animation: fadeUp .25s ease both; }
+.view.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-  /* Two-column day */
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .col { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
-  .col-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-  .col-head .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .col-head h3 { font-size: 15px; }
-  .col-head .count { margin-left: auto; color: var(--muted); font-size: 13px; }
+/* ─── Stat strip ─── */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
+.stat {
+  border-radius: var(--radius); padding: 20px 18px;
+  box-shadow: var(--shadow-sm); transition: transform .18s;
+}
+.stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.stat:nth-child(1) { background: var(--stat1-bg); }
+.stat:nth-child(2) { background: var(--stat2-bg); }
+.stat:nth-child(3) { background: var(--stat3-bg); }
+.stat:nth-child(4) { background: var(--stat4-bg); }
+.stat .s-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+.stat .big {
+  font-size: 34px; font-weight: 900; line-height: 1; letter-spacing: -.5px;
+}
+.stat:nth-child(1) .big { color: var(--stat1-c); }
+.stat:nth-child(2) .big { color: var(--stat2-c); }
+.stat:nth-child(3) .big { color: var(--stat3-c); }
+.stat:nth-child(4) .big { color: var(--stat4-c); }
+.stat .lbl { font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; }
 
-  /* Task row */
-  .task { display: flex; align-items: flex-start; gap: 11px; padding: 11px; border-radius: 12px; border: 1px solid transparent;
-          transition: .15s; }
-  .task:hover { background: var(--card-hover); border-color: var(--line); }
-  .check { width: 21px; height: 21px; min-width: 21px; border-radius: 7px; border: 2px solid var(--muted); cursor: pointer;
-           display: grid; place-items: center; margin-top: 1px; transition: .15s; }
-  .check:hover { border-color: var(--accent); }
-  .check.done { background: var(--green); border-color: var(--green); color: #06351c; font-weight: 900; }
-  .task-main { flex: 1; min-width: 0; }
-  .task-title { font-size: 14px; line-height: 1.35; word-break: break-word; }
-  .task.done .task-title { text-decoration: line-through; color: var(--muted); }
-  .task-meta { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
-  .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-  .tag.p-high { color: var(--red); border-color: rgba(255,107,107,.4); background: rgba(255,107,107,.1); }
-  .tag.p-med { color: var(--yellow); border-color: rgba(255,206,79,.4); background: rgba(255,206,79,.1); }
-  .tag.p-low { color: var(--green); border-color: rgba(61,220,132,.4); background: rgba(61,220,132,.1); }
-  .tag.who { color: var(--accent-2); border-color: rgba(24,212,200,.4); }
-  .tag.overdue { color: var(--red); border-color: rgba(255,107,107,.5); background: rgba(255,107,107,.12); }
-  .task-x { opacity: 0; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; padding: 2px 6px; }
-  .task:hover .task-x { opacity: 1; }
-  .task-x:hover { color: var(--red); }
-  .empty { color: var(--muted); font-size: 13.5px; text-align: center; padding: 22px 10px; }
+.section-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 18px; flex-wrap: wrap; }
+.section-head h2 { font-size: 18px; font-weight: 800; }
+.section-head .sub { color: var(--muted); font-size: 12.5px; }
 
-  /* Filters */
-  .filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
-  .seg { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
-  .seg button { background: none; border: none; color: var(--muted); padding: 9px 14px; cursor: pointer; font-size: 13px; font-weight: 600; }
-  .seg button.active { background: var(--accent); color: #fff; }
+/* ─── Quick-add ─── */
+.quickadd {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  background: var(--card); padding: 14px 16px;
+  border-radius: var(--radius); margin-bottom: 22px; box-shadow: var(--shadow-sm);
+}
+input, textarea, select {
+  background: var(--bg); border: 2px solid var(--line); color: var(--text);
+  padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px;
+  font-family: inherit; outline: none; transition: border-color .15s, box-shadow .15s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(232,114,42,.12);
+}
+body[data-ui="mint"] input:focus, body[data-ui="mint"] textarea:focus, body[data-ui="mint"] select:focus {
+  box-shadow: 0 0 0 4px rgba(30,158,110,.12);
+}
+body[data-ui="candy"] input:focus, body[data-ui="candy"] textarea:focus, body[data-ui="candy"] select:focus {
+  box-shadow: 0 0 0 4px rgba(217,79,158,.12);
+}
+body[data-ui="volt"] input:focus, body[data-ui="volt"] textarea:focus, body[data-ui="volt"] select:focus {
+  box-shadow: 0 0 0 4px rgba(200,244,0,.14);
+}
+.quickadd input[type=text] { flex: 1; min-width: 180px; }
+textarea { resize: vertical; min-height: 84px; width: 100%; }
 
-  /* Team */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
-  .member { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
-  .member-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .avatar { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; font-weight: 800; font-size: 18px; color: #fff; }
-  .member h3 { font-size: 16px; }
-  .member .role { color: var(--muted); font-size: 12.5px; }
-  .eff { margin-left: auto; text-align: right; }
-  .eff .num { font-size: 22px; font-weight: 800; }
-  .eff .lbl { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
-  .meters { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 14px; }
-  .meter .meter-top { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; color: var(--muted); }
-  .meter .meter-top b { color: var(--text); }
-  .bar { height: 8px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; }
-  .bar > span { display: block; height: 100%; border-radius: 999px; transition: width .5s; }
-  .member-tasks { border-top: 1px solid var(--line); padding-top: 12px; }
-  .member-tasks .mt-head { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
-  .chiplist { display: flex; flex-direction: column; gap: 6px; }
-  .mtask { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .mtask .mini-bar { flex: 1; height: 6px; background: var(--bg-soft); border-radius: 999px; overflow: hidden; }
-  .mtask .mini-bar > span { display: block; height: 100%; background: var(--accent); }
-  .mtask .pct { color: var(--muted); font-size: 12px; min-width: 34px; text-align: right; }
+/* ─── Buttons ─── */
+.btn {
+  background: var(--accent); color: #fff; border: none;
+  padding: 11px 20px; border-radius: var(--radius-sm); cursor: pointer;
+  font-size: 14px; font-weight: 800; transition: .18s; white-space: nowrap;
+}
+body[data-ui="volt"] .btn { color: #000; }
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); filter: brightness(1.06); }
+.btn.ghost {
+  background: transparent; border: 2px solid var(--line); color: var(--muted);
+  filter: none;
+}
+.btn.ghost:hover { background: var(--card-hover); color: var(--text); box-shadow: var(--shadow-sm); }
+.btn.sm { padding: 7px 14px; font-size: 12.5px; }
 
-  /* Updates feed */
-  .timeline { display: flex; flex-direction: column; gap: 12px; }
-  .log { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 17px; }
-  .log-top { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12.5px; color: var(--muted); }
-  .log-top .mood { font-size: 16px; }
-  .log p { font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
-  .mood-pick { display: flex; gap: 6px; }
-  .mood-pick span { font-size: 20px; cursor: pointer; opacity: .4; transition: .15s; padding: 3px; border-radius: 8px; }
-  .mood-pick span:hover { opacity: .8; }
-  .mood-pick span.sel { opacity: 1; background: var(--card-hover); transform: scale(1.15); }
+/* ─── Day columns ─── */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.col {
+  background: var(--card); border-radius: var(--radius);
+  padding: 18px; box-shadow: var(--shadow-sm);
+}
+.col-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.col-head .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.col-head h3 { font-size: 15px; font-weight: 800; }
+.col-head .count {
+  margin-left: auto; background: var(--bg); color: var(--muted);
+  font-size: 12px; font-weight: 800; padding: 3px 11px; border-radius: 999px;
+}
 
-  /* Modal */
-  .overlay { position: fixed; inset: 0; background: rgba(8,10,24,.66); backdrop-filter: blur(4px); display: none;
-             place-items: center; z-index: 50; padding: 20px; }
-  .overlay.show { display: grid; }
-  .modal { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 20px; padding: 24px; width: 100%;
-           max-width: 460px; box-shadow: var(--shadow); animation: pop .2s ease; }
-  @keyframes pop { from { transform: scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
-  .modal h2 { font-size: 18px; margin-bottom: 16px; }
-  .field { margin-bottom: 13px; }
-  .field label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; }
-  .field input, .field select, .field textarea { width: 100%; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
-  .who-list { display: flex; flex-wrap: wrap; gap: 7px; }
-  .who-check { display: flex; align-items: center; gap: 7px; background: var(--bg-soft); border: 1px solid var(--line);
-               padding: 7px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; transition: .15s; }
-  .who-check:hover { border-color: var(--accent); }
-  .who-check input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
-  .who-check.checked { background: rgba(124,92,255,.12); border-color: var(--accent); color: var(--accent); }
+/* ─── Task rows ─── */
+.task {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 11px; border-radius: var(--radius-sm); transition: background .15s;
+}
+.task:hover { background: var(--card-hover); }
+.check {
+  width: 22px; height: 22px; min-width: 22px; border-radius: 7px;
+  border: 2.5px solid var(--line); cursor: pointer;
+  display: grid; place-items: center; margin-top: 1px; transition: .15s;
+}
+.check:hover { border-color: var(--accent); }
+.check.done { background: var(--green); border-color: var(--green); color: #fff; font-size: 12px; font-weight: 900; }
+.task-main { flex: 1; min-width: 0; cursor: pointer; }
+.task-title { font-size: 14px; font-weight: 500; line-height: 1.4; word-break: break-word; }
+.task.done .task-title { text-decoration: line-through; color: var(--muted); opacity: .8; }
+.task-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
+.tag {
+  font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  background: var(--bg); color: var(--muted); font-weight: 700;
+}
+.tag.p-high { color: var(--red); background: rgba(232,76,76,.1); }
+.tag.p-med  { color: var(--yellow); background: rgba(244,188,28,.12); }
+.tag.p-low  { color: var(--green); background: rgba(90,184,90,.1); }
+.tag.who    { color: var(--accent); background: rgba(232,114,42,.1); }
+body[data-ui="mint"]  .tag.who { background: rgba(30,158,110,.1); }
+body[data-ui="candy"] .tag.who { background: rgba(217,79,158,.1); }
+body[data-ui="volt"]  .tag.who { background: rgba(200,244,0,.1); color: var(--accent); }
+.tag.overdue { color: var(--red); background: rgba(232,76,76,.1); }
+.task-x {
+  opacity: 0; background: none; border: none; color: var(--muted);
+  cursor: pointer; font-size: 15px; padding: 3px 7px; border-radius: 7px; transition: .15s;
+}
+.task:hover .task-x { opacity: 1; }
+.task-x:hover { color: var(--red); background: rgba(232,76,76,.1); }
+.empty { color: var(--muted); font-size: 13.5px; text-align: center; padding: 30px 10px; }
 
-  .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(120px); background: var(--card);
-           border: 1px solid var(--line); padding: 13px 20px; border-radius: 14px; box-shadow: var(--shadow);
-           display: flex; align-items: center; gap: 10px; font-size: 14px; transition: transform .35s cubic-bezier(.2,1.4,.4,1); z-index: 60; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+/* ─── Filters ─── */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+.seg {
+  display: flex; background: var(--card); border-radius: 999px;
+  box-shadow: var(--shadow-sm); padding: 4px; gap: 2px;
+}
+.seg button {
+  background: none; border: none; color: var(--muted); padding: 8px 15px;
+  cursor: pointer; font-size: 13px; font-weight: 700; border-radius: 999px; transition: .15s;
+}
+.seg button.active { background: var(--accent); color: #fff; }
+body[data-ui="volt"] .seg button.active { color: #000; }
 
-  /* Color panel */
-  .cpanel { position: fixed; top: 0; right: -340px; width: 320px; height: 100vh; background: var(--bg-soft);
-            border-left: 1px solid var(--line); box-shadow: -10px 0 40px rgba(0,0,0,.4); z-index: 70;
-            transition: right .3s cubic-bezier(.2,1,.4,1); overflow-y: auto; padding: 24px 20px 40px; }
-  .cpanel.open { right: 0; }
-  .cpanel h3 { font-size: 16px; margin-bottom: 4px; }
-  .cpanel .sub { font-size: 12.5px; color: var(--muted); margin-bottom: 18px; }
-  .cpanel-close { position: absolute; top: 18px; right: 18px; background: var(--card); border: 1px solid var(--line);
-                  color: var(--text); width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 16px; }
-  .section-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin: 18px 0 10px; }
-  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .swatch { border-radius: 12px; aspect-ratio: 1; cursor: pointer; border: 3px solid transparent;
-            display: grid; place-items: center; font-size: 18px; transition: .15s; }
-  .swatch:hover { transform: scale(1.08); }
-  .swatch.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--accent); }
-  .custom-colors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cp-field { display: flex; flex-direction: column; gap: 5px; }
-  .cp-field label { font-size: 12px; color: var(--muted); }
-  .cp-field input[type=color] { width: 100%; height: 40px; border-radius: 10px; border: 1px solid var(--line);
-                                 cursor: pointer; background: var(--card); padding: 4px; }
-  .cp-field input[type=text] { width: 100%; }
-  .cpanel-overlay { position: fixed; inset: 0; z-index: 69; display: none; }
-  .cpanel-overlay.open { display: block; }
+/* ─── Team ─── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
+.member {
+  background: var(--card); border-radius: var(--radius);
+  padding: 20px; box-shadow: var(--shadow-sm);
+}
+.member-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.avatar {
+  width: 50px; height: 50px; border-radius: 15px;
+  display: grid; place-items: center; font-weight: 900; font-size: 18px; color: #fff;
+  flex-shrink: 0;
+}
+.member h3 { font-size: 16px; font-weight: 800; }
+.member .role { color: var(--muted); font-size: 12.5px; margin-top: 1px; }
+.eff { margin-left: auto; text-align: right; }
+.eff .num { font-size: 26px; font-weight: 900; }
+.eff .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 700; }
+.meters { display: flex; flex-direction: column; gap: 10px; margin: 2px 0 14px; }
+.meter .meter-top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: var(--muted); }
+.meter .meter-top b { color: var(--text); font-weight: 700; }
+.bar { height: 8px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+.bar > span { display: block; height: 100%; border-radius: 999px; transition: width .6s ease; }
+.member-tasks { border-top: 2px dashed var(--line); padding-top: 14px; }
+.member-tasks .mt-head {
+  font-size: 11px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: .7px; margin-bottom: 10px; font-weight: 800;
+}
+.chiplist { display: flex; flex-direction: column; gap: 6px; }
+.mtask { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.mtask .mini-bar { flex: 1; height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; }
+.mtask .mini-bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.mtask .pct { color: var(--muted); font-size: 12px; min-width: 36px; text-align: right; font-weight: 700; }
 
-  @media (max-width: 760px) {
-    .stats { grid-template-columns: 1fr 1fr; }
-    .cols { grid-template-columns: 1fr; }
-    .row2 { grid-template-columns: 1fr; }
-    .cpanel { width: 100%; right: -100%; }
-  }
+/* ─── Updates ─── */
+.timeline { display: flex; flex-direction: column; gap: 12px; }
+.log { background: var(--card); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+.log-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+.log-top .mood { font-size: 20px; }
+.log p { font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+.mood-pick { display: flex; gap: 6px; }
+.mood-pick span { font-size: 22px; cursor: pointer; opacity: .3; transition: .15s; padding: 4px; border-radius: 10px; }
+.mood-pick span:hover { opacity: .7; }
+.mood-pick span.sel { opacity: 1; background: var(--bg); transform: scale(1.2); }
+
+/* ─── Modals ─── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(30,15,5,.5);
+  backdrop-filter: blur(8px); display: none; place-items: center; z-index: 50; padding: 20px;
+}
+.overlay.show { display: grid; }
+.modal {
+  background: var(--bg-soft); border-radius: var(--radius); padding: 28px; width: 100%;
+  max-width: 460px; box-shadow: var(--shadow-lg); animation: pop .22s ease both;
+}
+@keyframes pop { from { transform: scale(.94) translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal h2 { font-size: 20px; font-weight: 900; margin-bottom: 20px; }
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px;
+  font-weight: 800; text-transform: uppercase; letter-spacing: .5px;
+}
+.field input, .field select, .field textarea { width: 100%; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+/* Quick-add who pills */
+.qa-who-wrap { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.qa-who-wrap .lbl { font-size: 12px; color: var(--muted); white-space: nowrap; font-weight: 700; }
+.qa-pill {
+  padding: 7px 14px; border-radius: 999px; border: 2px solid var(--line);
+  font-size: 12.5px; cursor: pointer; background: var(--bg-soft); color: var(--muted);
+  transition: .15s; white-space: nowrap; font-weight: 700;
+}
+.qa-pill:hover { border-color: var(--accent); color: var(--text); }
+.qa-pill.sel { border-color: var(--accent); color: var(--accent); background: var(--stat1-bg); }
+body[data-ui="mint"]  .qa-pill.sel { background: var(--stat1-bg); }
+body[data-ui="candy"] .qa-pill.sel { background: var(--stat1-bg); }
+body[data-ui="volt"]  .qa-pill.sel { background: var(--stat1-bg); }
+
+/* Modal who checkboxes */
+.who-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.who-check {
+  display: flex; align-items: center; gap: 7px; background: var(--bg);
+  border: 2px solid var(--line); padding: 8px 14px; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13px; transition: .15s; font-weight: 600;
+}
+.who-check:hover { border-color: var(--accent); }
+.who-check input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.who-check.checked { border-color: var(--accent); color: var(--accent); background: var(--stat1-bg); }
+body[data-ui="mint"]  .who-check.checked { background: var(--stat1-bg); }
+body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
+
+/* ─── Toast ─── */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  background: var(--card); box-shadow: var(--shadow-lg);
+  padding: 14px 24px; border-radius: 999px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 700;
+  transition: transform .38s cubic-bezier(.2,1.4,.4,1); z-index: 60;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─── Theme panel ─── */
+.cpanel {
+  position: fixed; top: 0; right: -360px; width: 340px; height: 100vh;
+  background: var(--bg-soft); box-shadow: -12px 0 50px rgba(0,0,0,.2);
+  z-index: 70; transition: right .32s cubic-bezier(.2,1,.4,1);
+  overflow-y: auto; padding: 28px 22px 60px;
+}
+.cpanel.open { right: 0; }
+.cpanel-close {
+  position: absolute; top: 20px; right: 20px; background: var(--card);
+  border: none; color: var(--text); width: 36px; height: 36px;
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.cp-head { font-size: 17px; font-weight: 900; margin-bottom: 4px; }
+.cp-sub  { font-size: 12px; color: var(--muted); margin-bottom: 22px; }
+.section-lbl {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .9px;
+  color: var(--muted); margin: 22px 0 10px; font-weight: 800;
+}
+
+/* UI Theme buttons */
+.ui-themes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.utb {
+  border: 2.5px solid var(--line); border-radius: var(--radius-sm); padding: 11px;
+  cursor: pointer; background: var(--card); text-align: left;
+  transition: .18s; display: flex; align-items: center; gap: 9px;
+}
+.utb:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.utb.active { border-color: var(--accent); background: var(--stat1-bg); }
+.utb-dot { width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0; }
+.utb-name { font-size: 12px; font-weight: 800; color: var(--text); }
+.utb-desc { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+
+/* Color swatches */
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.swatch {
+  border-radius: 12px; aspect-ratio: 1; cursor: pointer; border: 3px solid transparent;
+  display: grid; place-items: center; font-size: 18px; transition: .15s;
+}
+.swatch:hover { transform: scale(1.1); }
+.swatch.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--accent); }
+
+/* Custom color pickers */
+.custom-colors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cp-field { display: flex; flex-direction: column; gap: 5px; }
+.cp-field label { font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .4px; }
+.cp-field input[type=color] {
+  width: 100%; height: 44px; border-radius: var(--radius-sm); border: 2px solid var(--line);
+  cursor: pointer; background: var(--card); padding: 4px;
+}
+.cp-field input[type=text] { width: 100%; }
+.cpanel-overlay { position: fixed; inset: 0; z-index: 69; display: none; }
+.cpanel-overlay.open { display: block; }
+
+/* ─── Responsive ─── */
+@media (max-width: 760px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .cols  { grid-template-columns: 1fr; }
+  .row2  { grid-template-columns: 1fr; }
+  .cpanel { width: 100%; right: -100%; }
+  .tabs { display: flex; flex-wrap: wrap; border-radius: var(--radius-sm); width: 100%; }
+  .tab  { flex: 1; text-align: center; padding: 10px 8px; font-size: 12.5px; }
+}
 </style>
 </head>
-<body>
+<body data-ui="cozy">
 <div class="wrap">
+
+  <!-- ── Header ── -->
   <header>
     <div class="brand">
-      <div class="logo">🗓️</div>
-      <div>
+      <div class="noon-badge">
+        <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="0,0 58,0 58,44 44,58 0,58" fill="#2323CC"/>
+          <text x="7" y="16" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="9.5" letter-spacing="0.2">noon</text>
+          <text x="5" y="33" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="13">super</text>
+          <text x="5" y="49" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="13">mall</text>
+        </svg>
+      </div>
+      <div class="brand-info">
         <h1>Projects Tracker</h1>
         <p id="greeting">Supermall</p>
       </div>
@@ -242,10 +485,10 @@
     <div class="pill">🔥 <b id="streakCount">0</b> day streak</div>
     <div class="pill" id="todayDate"></div>
     <div class="pill" id="syncPill" title="Sync status" style="display:none">🔴 <span id="syncLabel">Offline</span></div>
-    <button class="icon-btn" id="paletteBtn" title="Customize colors">🎨</button>
-    <button class="icon-btn" id="themeBtn" title="Toggle dark/light">🌙</button>
+    <button class="icon-btn" id="paletteBtn" title="Themes & colors">🎨</button>
   </header>
 
+  <!-- ── Tabs ── -->
   <div class="tabs">
     <button class="tab active" data-view="today">☀️ Today</button>
     <button class="tab" data-view="tasks">✅ Tasks</button>
@@ -253,21 +496,21 @@
     <button class="tab" data-view="updates">📝 Updates</button>
   </div>
 
-  <!-- TODAY -->
+  <!-- ── TODAY ── -->
   <div class="view active" id="view-today">
     <div class="stats">
-      <div class="stat"><span class="emoji">📌</span><div class="big" id="sTodayTotal">0</div><div class="lbl">Planned for today</div></div>
-      <div class="stat"><span class="emoji">✅</span><div class="big" id="sTodayDone">0</div><div class="lbl">Done today</div></div>
-      <div class="stat"><span class="emoji">🎯</span><div class="big" id="sTodayPct">0%</div><div class="lbl">Day progress</div></div>
-      <div class="stat"><span class="emoji">⚠️</span><div class="big" id="sOverdue">0</div><div class="lbl">Overdue</div></div>
+      <div class="stat"><span class="s-icon">📌</span><div class="big" id="sTodayTotal">0</div><div class="lbl">Planned for today</div></div>
+      <div class="stat"><span class="s-icon">✅</span><div class="big" id="sTodayDone">0</div><div class="lbl">Done today</div></div>
+      <div class="stat"><span class="s-icon">🎯</span><div class="big" id="sTodayPct">0%</div><div class="lbl">Day progress</div></div>
+      <div class="stat"><span class="s-icon">⚠️</span><div class="big" id="sOverdue">0</div><div class="lbl">Overdue</div></div>
     </div>
 
     <div class="quickadd">
       <input type="text" id="qaTitle" placeholder="Add a task for today… (Enter to add)">
       <select id="qaCat"><option value="work">💼 Work</option><option value="personal">🏠 Personal</option></select>
       <select id="qaPrio"><option value="med">Medium</option><option value="high">High</option><option value="low">Low</option></select>
-      <select id="qaWho"><option value="me">Me</option></select>
-      <button class="btn" id="qaAdd">Add</button>
+      <div class="qa-who-wrap"><span class="lbl">Assign:</span><div id="qaWhoList"></div></div>
+      <button class="btn" id="qaAdd">Add ✨</button>
     </div>
 
     <div class="cols">
@@ -282,7 +525,7 @@
     </div>
   </div>
 
-  <!-- TASKS -->
+  <!-- ── TASKS ── -->
   <div class="view" id="view-tasks">
     <div class="filters">
       <div class="seg" id="segCat">
@@ -302,13 +545,13 @@
     <div id="taskList"></div>
   </div>
 
-  <!-- TEAM -->
+  <!-- ── TEAM ── -->
   <div class="view" id="view-team">
     <div class="stats">
-      <div class="stat"><span class="emoji">👥</span><div class="big" id="sMembers">0</div><div class="lbl">Team members</div></div>
-      <div class="stat"><span class="emoji">📋</span><div class="big" id="sTeamActive">0</div><div class="lbl">Active team tasks</div></div>
-      <div class="stat"><span class="emoji">⚡</span><div class="big" id="sTeamEff">0%</div><div class="lbl">Avg. efficiency</div></div>
-      <div class="stat"><span class="emoji">⏱️</span><div class="big" id="sTeamOnTime">0%</div><div class="lbl">On-time rate</div></div>
+      <div class="stat"><span class="s-icon">👥</span><div class="big" id="sMembers">0</div><div class="lbl">Team members</div></div>
+      <div class="stat"><span class="s-icon">📋</span><div class="big" id="sTeamActive">0</div><div class="lbl">Active team tasks</div></div>
+      <div class="stat"><span class="s-icon">⚡</span><div class="big" id="sTeamEff">0%</div><div class="lbl">Avg. efficiency</div></div>
+      <div class="stat"><span class="s-icon">⏱️</span><div class="big" id="sTeamOnTime">0%</div><div class="lbl">On-time rate</div></div>
     </div>
     <div class="section-head">
       <h2>Your team</h2>
@@ -319,7 +562,7 @@
     <div class="grid" id="teamGrid"></div>
   </div>
 
-  <!-- UPDATES -->
+  <!-- ── UPDATES ── -->
   <div class="view" id="view-updates">
     <div class="col" style="margin-bottom:18px">
       <div class="col-head"><h3>📝 Log an update</h3></div>
@@ -337,7 +580,7 @@
   </div>
 </div>
 
-<!-- Task modal -->
+<!-- ── Task modal ── -->
 <div class="overlay" id="taskModal">
   <div class="modal">
     <h2 id="taskModalTitle">New task</h2>
@@ -361,7 +604,7 @@
   </div>
 </div>
 
-<!-- Member modal -->
+<!-- ── Member modal ── -->
 <div class="overlay" id="memberModal">
   <div class="modal">
     <h2 id="memberModalTitle">Add team member</h2>
@@ -375,45 +618,48 @@
   </div>
 </div>
 
-<!-- Color panel -->
+<!-- ── Theme & Color panel ── -->
 <div class="cpanel-overlay" id="cpanelOverlay"></div>
 <div class="cpanel" id="cpanel">
   <button class="cpanel-close" id="cpanelClose">✕</button>
-  <h3>Page Color</h3>
-  <p class="sub">Pick a preset or build your own</p>
+  <div class="cp-head">Themes & Colors</div>
+  <div class="cp-sub">Change the whole look or just the accents</div>
 
-  <div class="section-lbl">Presets</div>
+  <div class="section-lbl">UI Style</div>
+  <div class="ui-themes" id="uiThemes"></div>
+
+  <div class="section-lbl">Color Presets</div>
   <div class="swatches" id="swatches"></div>
 
   <div class="section-lbl">Custom accents</div>
   <div class="custom-colors">
     <div class="cp-field">
-      <label>Primary color</label>
-      <input type="color" id="cpAccent1" value="#7c5cff">
-      <input type="text" id="cpAccent1Hex" placeholder="#7c5cff" maxlength="7">
+      <label>Primary</label>
+      <input type="color" id="cpAccent1" value="#e8722a">
+      <input type="text" id="cpAccent1Hex" placeholder="#e8722a" maxlength="7">
     </div>
     <div class="cp-field">
-      <label>Secondary color</label>
-      <input type="color" id="cpAccent2" value="#18d4c8">
-      <input type="text" id="cpAccent2Hex" placeholder="#18d4c8" maxlength="7">
+      <label>Secondary</label>
+      <input type="color" id="cpAccent2" value="#f4a94a">
+      <input type="text" id="cpAccent2Hex" placeholder="#f4a94a" maxlength="7">
     </div>
   </div>
 
   <div class="section-lbl">Background tint</div>
   <div class="custom-colors">
     <div class="cp-field">
-      <label>Base background</label>
-      <input type="color" id="cpBg" value="#0f1226">
-      <input type="text" id="cpBgHex" placeholder="#0f1226" maxlength="7">
+      <label>Background</label>
+      <input type="color" id="cpBg" value="#fdf6ee">
+      <input type="text" id="cpBgHex" placeholder="#fdf6ee" maxlength="7">
     </div>
     <div class="cp-field">
-      <label>Card color</label>
-      <input type="color" id="cpCard" value="#1d2142">
-      <input type="text" id="cpCardHex" placeholder="#1d2142" maxlength="7">
+      <label>Card</label>
+      <input type="color" id="cpCard" value="#ffffff">
+      <input type="text" id="cpCardHex" placeholder="#ffffff" maxlength="7">
     </div>
   </div>
 
-  <div style="margin-top:20px;display:flex;gap:10px">
+  <div style="margin-top:22px;display:flex;gap:10px">
     <button class="btn" id="cpApply" style="flex:1">Apply</button>
     <button class="btn ghost" id="cpReset">Reset</button>
   </div>
@@ -427,21 +673,15 @@
 const LS = "daydeck.v1";
 const uid = () => Math.random().toString(36).slice(2, 9);
 const todayStr = () => new Date().toISOString().slice(0, 10);
-const AVATAR_COLORS = ["#7c5cff","#18d4c8","#ff7ab6","#5b9bff","#3ddc84","#ffce4f","#ff6b6b","#b06bff"];
+const AVATAR_COLORS = ["#e8722a","#1e9e6e","#d94f9e","#4c8ee8","#5ab85a","#f4bc1c","#e84c4c","#7c5cff"];
 
 let state = {
-  tasks: [],
-  team: [],
-  updates: [],
-  theme: "dark",
-  palette: "purple",
-  customColors: null,
-  streak: 0,
-  lastActive: null,
-  mood: "🚀",
+  tasks: [], team: [], updates: [],
+  uiTheme: "cozy", palette: "cozy", customColors: null,
+  streak: 0, lastActive: null, mood: "🚀",
 };
 
-/* ---------- Firebase config — fill in after Step 2 ---------- */
+/* ── Firebase ── */
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyAUdesldtHwvvpz1hnIkuqK8SPR4aj5vgI",
   authDomain:        "supermall-tracker.firebaseapp.com",
@@ -452,12 +692,10 @@ const FIREBASE_CONFIG = {
   appId:             "1:809165952161:web:e63a9d8384642755c80ce0"
 };
 
-/* Shared data keys — synced across teammates; UI prefs stay local */
 const SHARED_KEYS = ['tasks', 'team', 'updates', 'streak', 'lastActive'];
 let dbRef = null, isRemoteUpdate = false;
 
 function initFirebase() {
-  if (FIREBASE_CONFIG.apiKey === "REPLACE_API_KEY") return; // not configured yet
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     dbRef = firebase.database().ref('supermall-tracker');
@@ -466,11 +704,12 @@ function initFirebase() {
       if (!data) return;
       isRemoteUpdate = true;
       SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
+      // migrate
+      state.tasks.forEach(t => { if (typeof t.who === "string") t.who = [t.who]; });
       localStorage.setItem(LS, JSON.stringify(state));
       renderAll();
       isRemoteUpdate = false;
     });
-    dbRef.on('value', () => setSyncStatus(true));
     firebase.database().ref('.info/connected').on('value', snap => setSyncStatus(snap.val()));
   } catch (e) { console.warn('Firebase init failed:', e.message); }
 }
@@ -484,14 +723,13 @@ function setSyncStatus(online) {
   else        { pill.firstChild.textContent = '🔴 '; lbl.textContent = 'Offline'; }
 }
 
-/* ---------- persistence ---------- */
+/* ── Persistence ── */
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(LS));
     if (d) state = Object.assign(state, d);
   } catch (e) {}
   if (!state.team.length && !state.tasks.length) seed();
-  // migrate old string who → array
   state.tasks.forEach(t => { if (typeof t.who === "string") t.who = [t.who]; });
 }
 function save() {
@@ -504,34 +742,34 @@ function save() {
 }
 
 function seed() {
-  const a = { id: uid(), name: "Priya Shah", role: "Backend Engineer", color: AVATAR_COLORS[1] };
-  const b = { id: uid(), name: "Marcus Lee", role: "Designer", color: AVATAR_COLORS[2] };
+  const a = { id: uid(), name: "Priya Shah",  role: "Backend Engineer", color: AVATAR_COLORS[1] };
+  const b = { id: uid(), name: "Marcus Lee",  role: "Designer",          color: AVATAR_COLORS[2] };
   state.team = [a, b];
   const t = todayStr();
   state.tasks = [
-    { id: uid(), title: "Review the sprint plan", cat: "work", prio: "high", who: ["me"], due: t, prog: 40, status: "open", today: true, createdAt: Date.now() },
-    { id: uid(), title: "Gym session", cat: "personal", prio: "med", who: ["me"], due: t, prog: 0, status: "open", today: true, createdAt: Date.now() },
-    { id: uid(), title: "Ship payments API", cat: "work", prio: "high", who: [a.id], due: t, prog: 70, status: "open", today: false, createdAt: Date.now() },
-    { id: uid(), title: "Onboarding redesign", cat: "work", prio: "med", who: [b.id], due: addDays(t, 2), prog: 30, status: "open", today: false, createdAt: Date.now() },
+    { id: uid(), title: "Review the sprint plan",   cat: "work",     prio: "high", who: ["me"],   due: t,            prog: 40, status: "open", today: true,  createdAt: Date.now() },
+    { id: uid(), title: "Gym session",               cat: "personal", prio: "med",  who: ["me"],   due: t,            prog: 0,  status: "open", today: true,  createdAt: Date.now() },
+    { id: uid(), title: "Ship payments API",         cat: "work",     prio: "high", who: [a.id],   due: t,            prog: 70, status: "open", today: false, createdAt: Date.now() },
+    { id: uid(), title: "Onboarding redesign",       cat: "work",     prio: "med",  who: [b.id],   due: addDays(t,2), prog: 30, status: "open", today: false, createdAt: Date.now() },
   ];
 }
 
-/* ---------- date helpers ---------- */
+/* ── Dates ── */
 function addDays(iso, n) { const d = new Date(iso); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
 function fmtDate(iso) { return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); }
 function dueLabel(iso) {
   if (!iso) return null;
   const today = todayStr();
   const diff = Math.round((new Date(iso) - new Date(today)) / 86400000);
-  if (diff < 0) return { txt: `${-diff}d overdue`, over: true };
+  if (diff < 0)  return { txt: `${-diff}d overdue`, over: true };
   if (diff === 0) return { txt: "Due today", over: false };
   if (diff === 1) return { txt: "Due tomorrow", over: false };
-  if (diff <= 7) return { txt: `Due in ${diff}d`, over: false };
+  if (diff <= 7)  return { txt: `Due in ${diff}d`, over: false };
   return { txt: new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" }), over: false };
 }
-function esc(s) { return (s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function esc(s) { return (s||"").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
-/* ---------- streak ---------- */
+/* ── Streak ── */
 function touchStreak() {
   const t = todayStr();
   if (state.lastActive === t) return;
@@ -541,7 +779,7 @@ function touchStreak() {
   save();
 }
 
-/* ---------- lookups ---------- */
+/* ── Who helpers ── */
 function whoName(id) {
   if (id === "me") return "Me";
   const m = state.team.find(x => x.id === id);
@@ -550,14 +788,33 @@ function whoName(id) {
 function toArr(who) { return Array.isArray(who) ? who : (who ? [who] : ["me"]); }
 function whoNames(who) { return toArr(who).map(whoName).join(", "); }
 
-/* ---------- task ops ---------- */
+/* ── Quick-add who pills ── */
+let qaWhoSelected = ["me"];
+function fillQaWhoList() {
+  const people = [{ id: "me", name: "Me" }, ...state.team.map(m => ({ id: m.id, name: m.name.split(" ")[0] }))];
+  qaWhoList.innerHTML = people.map(p =>
+    `<span class="qa-pill ${qaWhoSelected.includes(p.id) ? "sel" : ""}" data-id="${p.id}">${esc(p.name)}</span>`
+  ).join("");
+  qaWhoList.querySelectorAll(".qa-pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      const id = pill.dataset.id;
+      if (qaWhoSelected.includes(id)) {
+        if (qaWhoSelected.length === 1) return;
+        qaWhoSelected = qaWhoSelected.filter(x => x !== id);
+      } else {
+        qaWhoSelected = [...qaWhoSelected, id];
+      }
+      fillQaWhoList();
+    });
+  });
+}
+
+/* ── Task ops ── */
 function quickAdd() {
   const title = qaTitle.value.trim();
   if (!title) return;
-  state.tasks.push({
-    id: uid(), title, cat: qaCat.value, prio: qaPrio.value, who: [qaWho.value],
-    due: todayStr(), prog: 0, status: "open", today: true, createdAt: Date.now(),
-  });
+  state.tasks.push({ id: uid(), title, cat: qaCat.value, prio: qaPrio.value, who: [...qaWhoSelected],
+    due: todayStr(), prog: 0, status: "open", today: true, createdAt: Date.now() });
   qaTitle.value = "";
   touchStreak(); save(); renderAll();
   toast("➕", "Added to today");
@@ -578,17 +835,17 @@ function delTask(id) {
   save(); renderAll();
 }
 
-/* ---------- task modal ---------- */
+/* ── Task modal ── */
 function openTaskModal(task) {
   tEditId.value = task ? task.id : "";
   taskModalTitle.textContent = task ? "Edit task" : "New task";
   tTitle.value = task ? task.title : "";
   tNotes.value = task ? (task.notes || "") : "";
-  tCat.value = task ? task.cat : "work";
-  tPrio.value = task ? task.prio : "med";
+  tCat.value   = task ? task.cat   : "work";
+  tPrio.value  = task ? task.prio  : "med";
   fillWhoCheckboxes(task ? toArr(task.who) : ["me"]);
-  tDue.value = task ? (task.due || "") : todayStr();
-  tProg.value = task ? task.prog : 0; tProgVal.textContent = tProg.value;
+  tDue.value   = task ? (task.due || "") : todayStr();
+  tProg.value  = task ? task.prog : 0; tProgVal.textContent = tProg.value;
   tToday.value = task ? (task.today ? "yes" : "no") : "yes";
   taskModal.classList.add("show");
 }
@@ -597,15 +854,13 @@ function saveTask() {
   if (!title) { toast("✏️", "Give the task a name"); return; }
   const who = Array.from(tWhoList.querySelectorAll("input:checked")).map(x => x.value);
   if (!who.length) { toast("✏️", "Select at least one assignee"); return; }
-  const data = {
-    title, notes: tNotes.value.trim(), cat: tCat.value, prio: tPrio.value, who,
-    due: tDue.value || null, prog: +tProg.value, today: tToday.value === "yes",
-  };
+  const data = { title, notes: tNotes.value.trim(), cat: tCat.value, prio: tPrio.value, who,
+    due: tDue.value || null, prog: +tProg.value, today: tToday.value === "yes" };
   if (tEditId.value) {
     const t = state.tasks.find(x => x.id === tEditId.value);
     Object.assign(t, data);
     if (t.prog === 100 && t.status !== "done") { t.status = "done"; t.completedAt = Date.now(); t.onTime = t.due ? todayStr() <= t.due : true; }
-    if (t.prog < 100 && t.status === "done") { t.status = "open"; t.completedAt = null; }
+    if (t.prog < 100  && t.status === "done")  { t.status = "open"; t.completedAt = null; }
   } else {
     state.tasks.push(Object.assign({ id: uid(), status: data.prog === 100 ? "done" : "open", createdAt: Date.now() }, data));
   }
@@ -614,7 +869,7 @@ function saveTask() {
   toast("💾", "Task saved");
 }
 
-/* ---------- member ops ---------- */
+/* ── Member ops ── */
 function openMemberModal(m) {
   mEditId.value = m ? m.id : "";
   memberModalTitle.textContent = m ? "Edit member" : "Add team member";
@@ -638,39 +893,35 @@ function saveMember() {
 function delMember(id) {
   if (!confirm("Remove this member? Their tasks will be reassigned to you.")) return;
   state.team = state.team.filter(x => x.id !== id);
-  state.tasks.forEach(t => {
-    t.who = toArr(t.who).filter(w => w !== id);
-    if (!t.who.length) t.who = ["me"];
-  });
+  state.tasks.forEach(t => { t.who = toArr(t.who).filter(w => w !== id); if (!t.who.length) t.who = ["me"]; });
   save(); renderAll();
 }
 
-/* ---------- efficiency ---------- */
+/* ── Efficiency ── */
 function memberStats(id) {
-  const ts = state.tasks.filter(t => toArr(t.who).includes(id));
+  const ts   = state.tasks.filter(t => toArr(t.who).includes(id));
   const done = ts.filter(t => t.status === "done");
   const open = ts.filter(t => t.status !== "done");
   const total = ts.length;
   const completion = total ? Math.round(done.length / total * 100) : 0;
-  const withDue = done.filter(t => t.onTime !== undefined);
-  const onTime = withDue.length ? Math.round(withDue.filter(t => t.onTime).length / withDue.length * 100) : 100;
-  const avgProg = open.length ? Math.round(open.reduce((s, t) => s + (t.prog || 0), 0) / open.length) : 0;
-  // efficiency: completion weighted 65%, on-time 35%
-  const eff = Math.round(completion * 0.65 + onTime * 0.35);
+  const withDue    = done.filter(t => t.onTime !== undefined);
+  const onTime     = withDue.length ? Math.round(withDue.filter(t => t.onTime).length / withDue.length * 100) : 100;
+  const avgProg    = open.length ? Math.round(open.reduce((s, t) => s + (t.prog || 0), 0) / open.length) : 0;
+  const eff        = Math.round(completion * 0.65 + onTime * 0.35);
   return { total, done: done.length, open: open.length, completion, onTime, avgProg, eff, openTasks: open };
 }
 
-/* ---------- rendering ---------- */
+/* ── Rendering ── */
 function taskRow(t) {
   const dl = dueLabel(t.due);
   const overdue = dl && dl.over && t.status !== "done";
-  const prioTag = `<span class="tag p-${t.prio === "high" ? "high" : t.prio === "low" ? "low" : "med"}">${t.prio === "high" ? "High" : t.prio === "low" ? "Low" : "Med"}</span>`;
-  const whoTag = toArr(t.who).filter(id => id !== "me").map(id => `<span class="tag who">@${esc(whoName(id))}</span>`).join("");
-  const dueTag = dl ? `<span class="tag ${overdue ? "overdue" : ""}">${dl.txt}</span>` : "";
+  const prioTag = `<span class="tag p-${t.prio === "high" ? "high" : t.prio === "low" ? "low" : "med"}">${t.prio === "high" ? "🔴 High" : t.prio === "low" ? "🟢 Low" : "🟡 Med"}</span>`;
+  const whoTag  = toArr(t.who).filter(id => id !== "me").map(id => `<span class="tag who">@${esc(whoName(id))}</span>`).join("");
+  const dueTag  = dl ? `<span class="tag ${overdue ? "overdue" : ""}">${dl.txt}</span>` : "";
   const progTag = (t.status !== "done" && t.prog > 0) ? `<span class="tag">${t.prog}%</span>` : "";
   return `<div class="task ${t.status === "done" ? "done" : ""}">
     <div class="check ${t.status === "done" ? "done" : ""}" onclick="toggleTask('${t.id}')">${t.status === "done" ? "✓" : ""}</div>
-    <div class="task-main" onclick="editTaskById('${t.id}')" style="cursor:pointer">
+    <div class="task-main" onclick="editTaskById('${t.id}')">
       <div class="task-title">${esc(t.title)}</div>
       <div class="task-meta">${prioTag}${whoTag}${dueTag}${progTag}</div>
     </div>
@@ -679,30 +930,28 @@ function taskRow(t) {
 }
 
 function renderToday() {
-  const todays = state.tasks.filter(t => t.today || t.due === todayStr());
-  const work = todays.filter(t => t.cat === "work");
+  const todays   = state.tasks.filter(t => t.today || t.due === todayStr());
+  const work     = todays.filter(t => t.cat === "work");
   const personal = todays.filter(t => t.cat === "personal");
-  const sortFn = (a, b) => (a.status === "done") - (b.status === "done") || ({ high: 0, med: 1, low: 2 }[a.prio] - { high: 0, med: 1, low: 2 }[b.prio]);
+  const sortFn   = (a, b) => (a.status === "done") - (b.status === "done") || ({high:0,med:1,low:2}[a.prio] - {high:0,med:1,low:2}[b.prio]);
   work.sort(sortFn); personal.sort(sortFn);
-
-  todayWork.innerHTML = work.length ? work.map(taskRow).join("") : `<div class="empty">No work tasks for today 🌤️</div>`;
-  todayPersonal.innerHTML = personal.length ? personal.map(taskRow).join("") : `<div class="empty">Nothing personal planned</div>`;
+  todayWork.innerHTML     = work.length     ? work.map(taskRow).join("")     : `<div class="empty">No work tasks for today 🌤️</div>`;
+  todayPersonal.innerHTML = personal.length ? personal.map(taskRow).join("") : `<div class="empty">Nothing personal planned ✨</div>`;
   cntWork.textContent = work.length; cntPersonal.textContent = personal.length;
-
   const done = todays.filter(t => t.status === "done").length;
   sTodayTotal.textContent = todays.length;
-  sTodayDone.textContent = done;
-  sTodayPct.textContent = (todays.length ? Math.round(done / todays.length * 100) : 0) + "%";
-  sOverdue.textContent = state.tasks.filter(t => t.status !== "done" && t.due && t.due < todayStr()).length;
+  sTodayDone.textContent  = done;
+  sTodayPct.textContent   = (todays.length ? Math.round(done / todays.length * 100) : 0) + "%";
+  sOverdue.textContent    = state.tasks.filter(t => t.status !== "done" && t.due && t.due < todayStr()).length;
 }
 
 let filterCat = "all", filterStatus = "all", filterWho = "all";
 function renderTasks() {
   let list = state.tasks.slice();
-  if (filterCat !== "all") list = list.filter(t => t.cat === filterCat);
+  if (filterCat    !== "all") list = list.filter(t => t.cat === filterCat);
   if (filterStatus === "open") list = list.filter(t => t.status !== "done");
   if (filterStatus === "done") list = list.filter(t => t.status === "done");
-  if (filterWho !== "all") list = list.filter(t => toArr(t.who).includes(filterWho));
+  if (filterWho    !== "all") list = list.filter(t => toArr(t.who).includes(filterWho));
   list.sort((a, b) => (a.status === "done") - (b.status === "done") || (a.due || "9999").localeCompare(b.due || "9999"));
   taskList.innerHTML = list.length
     ? `<div class="col">${list.map(taskRow).join("")}</div>`
@@ -711,18 +960,20 @@ function renderTasks() {
 
 function renderTeam() {
   const stats = state.team.map(m => ({ m, s: memberStats(m.id) }));
-  sMembers.textContent = state.team.length;
+  sMembers.textContent    = state.team.length;
   sTeamActive.textContent = state.tasks.filter(t => t.who !== "me" && t.status !== "done").length;
   const effs = stats.filter(x => x.s.total > 0);
-  sTeamEff.textContent = (effs.length ? Math.round(effs.reduce((s, x) => s + x.s.eff, 0) / effs.length) : 0) + "%";
-  sTeamOnTime.textContent = (effs.length ? Math.round(effs.reduce((s, x) => s + x.s.onTime, 0) / effs.length) : 0) + "%";
-
+  sTeamEff.textContent    = (effs.length ? Math.round(effs.reduce((s,x) => s+x.s.eff,   0) / effs.length) : 0) + "%";
+  sTeamOnTime.textContent = (effs.length ? Math.round(effs.reduce((s,x) => s+x.s.onTime,0) / effs.length) : 0) + "%";
   teamGrid.innerHTML = stats.map(({ m, s }) => {
     const effColor = s.eff >= 75 ? "var(--green)" : s.eff >= 45 ? "var(--yellow)" : "var(--red)";
     const initials = m.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
-    const tasks = s.openTasks.slice(0, 4).map(t =>
-      `<div class="mtask"><span style="flex:0 0 auto;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)}</span>
-        <div class="mini-bar"><span style="width:${t.prog}%"></span></div><span class="pct">${t.prog}%</span></div>`).join("");
+    const tasks    = s.openTasks.slice(0, 4).map(t =>
+      `<div class="mtask">
+        <span style="flex:0 0 auto;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)}</span>
+        <div class="mini-bar"><span style="width:${t.prog}%"></span></div>
+        <span class="pct">${t.prog}%</span>
+      </div>`).join("");
     return `<div class="member">
       <div class="member-top">
         <div class="avatar" style="background:${m.color}">${initials}</div>
@@ -768,11 +1019,6 @@ function postUpdate() {
   toast("✨", "Update posted");
 }
 
-/* ---------- selects ---------- */
-function fillWhoSelect(sel, val) {
-  sel.innerHTML = `<option value="me">Me</option>` + state.team.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
-  if (val) sel.value = val;
-}
 function fillWhoCheckboxes(selectedIds) {
   const people = [{ id: "me", name: "Me" }, ...state.team.map(m => ({ id: m.id, name: m.name.split(" ")[0] }))];
   tWhoList.innerHTML = people.map(p => {
@@ -781,149 +1027,136 @@ function fillWhoCheckboxes(selectedIds) {
       <input type="checkbox" value="${p.id}" ${checked ? "checked" : ""}> ${esc(p.name)}
     </label>`;
   }).join("");
-  tWhoList.querySelectorAll("input").forEach(cb => cb.addEventListener("change", () => {
-    cb.closest(".who-check").classList.toggle("checked", cb.checked);
-  }));
+  tWhoList.querySelectorAll("input").forEach(cb => cb.addEventListener("change", () =>
+    cb.closest(".who-check").classList.toggle("checked", cb.checked)
+  ));
 }
 function fillAllSelects() {
-  fillWhoSelect(qaWho, qaWho.value || "me");
-  segWho.innerHTML = `<option value="all">Anyone</option><option value="me">Me</option>` + state.team.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
-  segWho.value = filterWho;
+  fillQaWhoList();
+  segWho.innerHTML    = `<option value="all">Anyone</option><option value="me">Me</option>` + state.team.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  segWho.value        = filterWho;
   updateWho.innerHTML = `<option value="">General</option><option value="me">Me</option>` + state.team.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
 }
 
-/* ---------- global handlers used in markup ---------- */
-window.toggleTask = toggleTask;
-window.delTask = delTask;
-window.editTaskById = id => openTaskModal(state.tasks.find(t => t.id === id));
-window.editMember = id => openMemberModal(state.team.find(m => m.id === id));
-window.delMember = delMember;
-window.assignTo = id => { openTaskModal(null); tCat.value = "work"; tWhoList.querySelectorAll("input").forEach(cb => { cb.checked = cb.value === id; cb.closest(".who-check").classList.toggle("checked", cb.checked); }); };
+window.toggleTask    = toggleTask;
+window.delTask       = delTask;
+window.editTaskById  = id => openTaskModal(state.tasks.find(t => t.id === id));
+window.editMember    = id => openMemberModal(state.team.find(m => m.id === id));
+window.delMember     = delMember;
+window.assignTo      = id => {
+  openTaskModal(null); tCat.value = "work";
+  tWhoList.querySelectorAll("input").forEach(cb => {
+    cb.checked = cb.value === id;
+    cb.closest(".who-check").classList.toggle("checked", cb.checked);
+  });
+};
 
-/* ---------- render all ---------- */
 function renderAll() {
   fillAllSelects();
   renderToday(); renderTasks(); renderTeam(); renderUpdates();
   streakCount.textContent = state.streak;
 }
 
-/* ---------- color themes ---------- */
-const THEMES = {
-  purple:  { name:'Purple Night', emoji:'🌌', accent:'#7c5cff', accent2:'#18d4c8', accent3:'#ff7ab6',
-             darkBg:'#0f1226', darkBgSoft:'#171a35', darkCard:'#1d2142', darkCardHover:'#242a52', darkLine:'#2c325e', darkText:'#eef0ff', darkMuted:'#9aa0d0',
-             lightBg:'#f4f5fc', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#f7f8ff', lightLine:'#e6e8f5', lightText:'#1a1d3a', lightMuted:'#6b7099' },
-  ocean:   { name:'Ocean Deep',   emoji:'🌊', accent:'#3b82f6', accent2:'#06b6d4', accent3:'#a78bfa',
-             darkBg:'#0a1628', darkBgSoft:'#0f2040', darkCard:'#162a4a', darkCardHover:'#1e3560', darkLine:'#1e3d6b', darkText:'#e0f0ff', darkMuted:'#7aabdc',
-             lightBg:'#f0f6ff', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#f5f9ff', lightLine:'#d1e5ff', lightText:'#0f2a4a', lightMuted:'#4a7eb0' },
-  forest:  { name:'Forest',       emoji:'🌿', accent:'#22c55e', accent2:'#84cc16', accent3:'#34d399',
-             darkBg:'#0d1f12', darkBgSoft:'#122a18', darkCard:'#1a3622', darkCardHover:'#1f4229', darkLine:'#2a5234', darkText:'#e0f5e8', darkMuted:'#7ab89c',
-             lightBg:'#f0faf3', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#f5fff8', lightLine:'#c8ebd3', lightText:'#0f2a1a', lightMuted:'#3a7a52' },
-  sunset:  { name:'Sunset',       emoji:'🌅', accent:'#f97316', accent2:'#f59e0b', accent3:'#fb923c',
-             darkBg:'#1a1008', darkBgSoft:'#261808', darkCard:'#32200a', darkCardHover:'#3d280f', darkLine:'#4d3415', darkText:'#fff5e0', darkMuted:'#c4955a',
-             lightBg:'#fff8f0', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#fff5eb', lightLine:'#fde9cc', lightText:'#2a1508', lightMuted:'#9a6540' },
-  rose:    { name:'Rose',         emoji:'🌸', accent:'#ec4899', accent2:'#f43f5e', accent3:'#c084fc',
-             darkBg:'#1a0f18', darkBgSoft:'#261520', darkCard:'#321a2c', darkCardHover:'#3d2038', darkLine:'#4d2a44', darkText:'#ffe0f5', darkMuted:'#c47aaa',
-             lightBg:'#fff0f7', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#fff5fb', lightLine:'#fdd5ec', lightText:'#2a0f20', lightMuted:'#904070' },
-  slate:   { name:'Slate',        emoji:'⚡', accent:'#6366f1', accent2:'#8b5cf6', accent3:'#06b6d4',
-             darkBg:'#111827', darkBgSoft:'#1f2937', darkCard:'#1f2937', darkCardHover:'#374151', darkLine:'#374151', darkText:'#f3f4f6', darkMuted:'#9ca3af',
-             lightBg:'#f9fafb', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#f3f4f6', lightLine:'#e5e7eb', lightText:'#111827', lightMuted:'#6b7280' },
-  crimson: { name:'Crimson',      emoji:'🔴', accent:'#ef4444', accent2:'#f97316', accent3:'#fb7185',
-             darkBg:'#1a0808', darkBgSoft:'#260f0f', darkCard:'#321515', darkCardHover:'#3d1a1a', darkLine:'#4d2222', darkText:'#ffe8e8', darkMuted:'#c47070',
-             lightBg:'#fff5f5', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#fff0f0', lightLine:'#fecaca', lightText:'#2a0808', lightMuted:'#904040' },
-  teal:    { name:'Teal Mist',    emoji:'🩵', accent:'#14b8a6', accent2:'#0ea5e9', accent3:'#a78bfa',
-             darkBg:'#0a1a1a', darkBgSoft:'#102424', darkCard:'#163030', darkCardHover:'#1c3c3c', darkLine:'#204a4a', darkText:'#e0ffff', darkMuted:'#6abcbc',
-             lightBg:'#f0fffe', lightBgSoft:'#ffffff', lightCard:'#ffffff', lightCardHover:'#f5ffff', lightLine:'#ccf5f3', lightText:'#0a2020', lightMuted:'#2a7878' },
+/* ── UI Theme system ── */
+const UI_THEMES = {
+  cozy:  { name: "Cozy Brew",  desc: "Warm & friendly",  grad: "linear-gradient(135deg,#e8722a,#f4a94a)", emoji: "☕" },
+  mint:  { name: "Mint Grove", desc: "Fresh & calm",      grad: "linear-gradient(135deg,#1e9e6e,#84d4b0)", emoji: "🌿" },
+  candy: { name: "Candy Pop",  desc: "Fun & playful",     grad: "linear-gradient(135deg,#d94f9e,#7c5cff)", emoji: "🍬" },
+  volt:  { name: "Volt",       desc: "Bold & electric",   grad: "linear-gradient(135deg,#c8f400,#00e8c8)", emoji: "⚡" },
 };
 
-function hexToRgb(hex) {
-  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return r ? `${parseInt(r[1],16)},${parseInt(r[2],16)},${parseInt(r[3],16)}` : null;
-}
-function lighten(hex, amt) {
-  let n = parseInt(hex.slice(1), 16);
-  const r = Math.min(255, (n >> 16) + amt), g = Math.min(255, ((n >> 8) & 0xff) + amt), b = Math.min(255, (n & 0xff) + amt);
-  return '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('');
+function applyUITheme(key) {
+  state.uiTheme = key;
+  document.body.dataset.ui = key || "cozy";
+  document.querySelectorAll(".utb").forEach(b => b.classList.toggle("active", b.dataset.uiKey === key));
 }
 
-function applyPalette(t, customOverride) {
-  const dark = state.theme === "dark";
-  const v = document.documentElement.style;
-  const accent  = customOverride?.accent  || t.accent;
-  const accent2 = customOverride?.accent2 || t.accent2;
-  const bg      = customOverride?.bg      || (dark ? t.darkBg      : t.lightBg);
-  const bgSoft  = dark ? t.darkBgSoft  : t.lightBgSoft;
-  const card    = customOverride?.card    || (dark ? t.darkCard    : t.lightCard);
-  const cardH   = dark ? t.darkCardHover : t.lightCardHover;
-  const line    = dark ? t.darkLine    : t.lightLine;
-  const text    = dark ? t.darkText    : t.lightText;
-  const muted   = dark ? t.darkMuted   : t.lightMuted;
+function buildUIThemeButtons() {
+  uiThemes.innerHTML = Object.entries(UI_THEMES).map(([k, t]) =>
+    `<button class="utb ${state.uiTheme === k ? "active" : ""}" data-ui-key="${k}">
+      <div class="utb-dot" style="background:${t.grad}"></div>
+      <div><div class="utb-name">${t.emoji} ${t.name}</div><div class="utb-desc">${t.desc}</div></div>
+    </button>`
+  ).join("");
+  uiThemes.querySelectorAll(".utb").forEach(btn =>
+    btn.addEventListener("click", () => {
+      applyUITheme(btn.dataset.uiKey);
+      localStorage.setItem(LS, JSON.stringify(state));
+      toast("🎨", `${UI_THEMES[btn.dataset.uiKey].name} applied`);
+    })
+  );
+}
 
-  v.setProperty('--accent',      accent);
-  v.setProperty('--accent-2',    accent2);
-  v.setProperty('--accent-3',    t.accent3);
-  v.setProperty('--bg',          bg);
-  v.setProperty('--bg-soft',     bgSoft);
-  v.setProperty('--card',        card);
-  v.setProperty('--card-hover',  cardH);
-  v.setProperty('--line',        line);
-  v.setProperty('--text',        text);
-  v.setProperty('--muted',       muted);
+/* ── Color palette system (accent overrides on top of UI theme) ── */
+const THEMES = {
+  purple:  { name:"Purple Night", emoji:"🌌", accent:"#7c5cff", accent2:"#18d4c8" },
+  ocean:   { name:"Ocean Deep",   emoji:"🌊", accent:"#3b82f6", accent2:"#06b6d4" },
+  forest:  { name:"Forest",       emoji:"🌿", accent:"#22c55e", accent2:"#84cc16" },
+  sunset:  { name:"Sunset",       emoji:"🌅", accent:"#f97316", accent2:"#f59e0b" },
+  rose:    { name:"Rose",         emoji:"🌸", accent:"#ec4899", accent2:"#f43f5e" },
+  slate:   { name:"Slate",        emoji:"⚡", accent:"#6366f1", accent2:"#8b5cf6" },
+  crimson: { name:"Crimson",      emoji:"🔴", accent:"#ef4444", accent2:"#f97316" },
+  teal:    { name:"Teal Mist",    emoji:"🩵", accent:"#14b8a6", accent2:"#0ea5e9" },
+};
 
-  const rgb1 = hexToRgb(accent), rgb2 = hexToRgb(accent2);
-  document.body.style.background = `radial-gradient(1200px 600px at 80% -10%,rgba(${rgb1},.18),transparent),radial-gradient(900px 500px at -10% 110%,rgba(${rgb2},.14),transparent),${bg}`;
+function setAccentVars(accent, accent2, bg, card) {
+  const b = document.body.style;
+  if (accent)  b.setProperty("--accent",   accent);
+  if (accent2) b.setProperty("--accent-2", accent2);
+  if (bg)      b.setProperty("--bg",       bg);
+  if (card)    b.setProperty("--card",     card);
+}
+function clearAccentVars() {
+  ["--accent","--accent-2","--bg","--card"].forEach(p => document.body.style.removeProperty(p));
 }
 
 function buildSwatches() {
   swatches.innerHTML = Object.entries(THEMES).map(([k, t]) =>
-    `<div class="swatch ${state.palette===k?'active':''}" data-key="${k}" style="background:linear-gradient(135deg,${t.accent},${t.accent2})" title="${t.name}"><span>${t.emoji}</span></div>`
-  ).join('');
+    `<div class="swatch ${state.palette===k?"active":""}" data-key="${k}"
+      style="background:linear-gradient(135deg,${t.accent},${t.accent2})" title="${t.name}">
+      <span>${t.emoji}</span></div>`
+  ).join("");
 }
 
 function syncPickerUI() {
-  const t = THEMES[state.palette] || THEMES.purple;
-  const dark = state.theme === 'dark';
-  const a1 = state.customColors?.accent  || t.accent;
-  const a2 = state.customColors?.accent2 || t.accent2;
-  const bg = state.customColors?.bg      || (dark ? t.darkBg   : t.lightBg);
-  const card = state.customColors?.card  || (dark ? t.darkCard : t.lightCard);
-  cpAccent1.value = a1; cpAccent1Hex.value = a1;
-  cpAccent2.value = a2; cpAccent2Hex.value = a2;
-  cpBg.value = bg;       cpBgHex.value = bg;
-  cpCard.value = card;   cpCardHex.value = card;
+  const t  = THEMES[state.palette] || THEMES.purple;
+  cpAccent1.value = state.customColors?.accent  || t.accent;  cpAccent1Hex.value = cpAccent1.value;
+  cpAccent2.value = state.customColors?.accent2 || t.accent2; cpAccent2Hex.value = cpAccent2.value;
+  const cs = getComputedStyle(document.body);
+  const bg = state.customColors?.bg   || cs.getPropertyValue("--bg").trim();
+  const cd = state.customColors?.card || cs.getPropertyValue("--card").trim();
+  if (/^#[0-9a-f]{6}$/i.test(bg)) { cpBg.value = bg; cpBgHex.value = bg; }
+  if (/^#[0-9a-f]{6}$/i.test(cd)) { cpCard.value = cd; cpCardHex.value = cd; }
 }
 
-function openCpanel() { cpanel.classList.add('open'); cpanelOverlay.classList.add('open'); buildSwatches(); syncPickerUI(); }
-function closeCpanel() { cpanel.classList.remove('open'); cpanelOverlay.classList.remove('open'); }
+function openCpanel()  { cpanel.classList.add("open"); cpanelOverlay.classList.add("open"); buildSwatches(); buildUIThemeButtons(); syncPickerUI(); }
+function closeCpanel() { cpanel.classList.remove("open"); cpanelOverlay.classList.remove("open"); }
 
 function pickSwatch(key) {
   state.palette = key; state.customColors = null;
+  clearAccentVars();
+  setAccentVars(THEMES[key].accent, THEMES[key].accent2);
   buildSwatches(); syncPickerUI();
-  applyPalette(THEMES[key]);
 }
 
 function applyCustom() {
   state.customColors = { accent: cpAccent1.value, accent2: cpAccent2.value, bg: cpBg.value, card: cpCard.value };
-  state.palette = 'custom';
+  state.palette = "custom";
+  clearAccentVars();
+  setAccentVars(state.customColors.accent, state.customColors.accent2, state.customColors.bg, state.customColors.card);
   buildSwatches();
-  applyPalette(THEMES.purple, state.customColors);
-  save(); toast('🎨', 'Colors applied'); closeCpanel();
+  save(); toast("🎨", "Colors applied"); closeCpanel();
 }
 
-/* ---------- theme + greeting ---------- */
-function applyTheme() {
-  document.documentElement.dataset.theme = state.theme;
-  themeBtn.textContent = state.theme === "dark" ? "🌙" : "☀️";
-  const t = THEMES[state.palette] || THEMES.purple;
-  applyPalette(t, state.customColors || null);
-}
+/* ── Greeting ── */
 function greet() {
   const h = new Date().getHours();
   const g = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-  greeting.textContent = `${g} — Supermall`;
+  greeting.textContent  = `${g} — Supermall`;
   todayDate.textContent = new Date().toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
 }
 
-/* ---------- toast ---------- */
+/* ── Toast ── */
 let toastTimer;
 function toast(icon, msg) {
   toastIcon.textContent = icon; toastMsg.textContent = msg;
@@ -932,7 +1165,7 @@ function toast(icon, msg) {
   toastTimer = setTimeout(() => document.getElementById("toast").classList.remove("show"), 2200);
 }
 
-/* ---------- wire up ---------- */
+/* ── Wire up ── */
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
   document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
   document.querySelectorAll(".view").forEach(x => x.classList.remove("active"));
@@ -940,15 +1173,15 @@ document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () =>
   document.getElementById("view-" + t.dataset.view).classList.add("active");
 }));
 
-qaAdd.onclick = quickAdd;
+qaAdd.onclick    = quickAdd;
 qaTitle.addEventListener("keydown", e => { if (e.key === "Enter") quickAdd(); });
 newTaskBtn.onclick = () => openTaskModal(null);
-tCancel.onclick = () => taskModal.classList.remove("show");
-tSave.onclick = saveTask;
+tCancel.onclick  = () => taskModal.classList.remove("show");
+tSave.onclick    = saveTask;
 tProg.addEventListener("input", () => tProgVal.textContent = tProg.value);
 newMemberBtn.onclick = () => openMemberModal(null);
-mCancel.onclick = () => memberModal.classList.remove("show");
-mSave.onclick = saveMember;
+mCancel.onclick  = () => memberModal.classList.remove("show");
+mSave.onclick    = saveMember;
 postUpdateBtn.onclick = postUpdate;
 
 document.getElementById("segCat").addEventListener("click", e => {
@@ -962,16 +1195,12 @@ document.getElementById("segStatus").addEventListener("click", e => {
   e.target.classList.add("active"); filterStatus = e.target.dataset.f; renderTasks();
 });
 segWho.addEventListener("change", () => { filterWho = segWho.value; renderTasks(); });
-
 document.getElementById("moodPick").addEventListener("click", e => {
   if (!e.target.dataset.m) return;
   state.mood = e.target.dataset.m;
   moodPick.querySelectorAll("span").forEach(s => s.classList.toggle("sel", s.dataset.m === state.mood));
 });
 
-themeBtn.onclick = () => { state.theme = state.theme === "dark" ? "light" : "dark"; applyTheme(); save(); };
-
-/* color panel wiring */
 paletteBtn.onclick = openCpanel;
 cpanelClose.onclick = closeCpanel;
 cpanelOverlay.onclick = closeCpanel;
@@ -981,9 +1210,9 @@ swatches.addEventListener("click", e => {
   if (key) { pickSwatch(key); save(); toast("🎨", `${THEMES[key].name} applied`); closeCpanel(); }
 });
 
-function syncHex(colorInput, hexInput) {
-  colorInput.addEventListener("input", () => { hexInput.value = colorInput.value; });
-  hexInput.addEventListener("input", () => { if (/^#[0-9a-f]{6}$/i.test(hexInput.value)) colorInput.value = hexInput.value; });
+function syncHex(ci, hi) {
+  ci.addEventListener("input", () => { hi.value = ci.value; });
+  hi.addEventListener("input", () => { if (/^#[0-9a-f]{6}$/i.test(hi.value)) ci.value = hi.value; });
 }
 syncHex(cpAccent1, cpAccent1Hex);
 syncHex(cpAccent2, cpAccent2Hex);
@@ -991,14 +1220,23 @@ syncHex(cpBg,      cpBgHex);
 syncHex(cpCard,    cpCardHex);
 
 cpApply.onclick = applyCustom;
-cpReset.onclick = () => { state.palette = "purple"; state.customColors = null; applyTheme(); buildSwatches(); syncPickerUI(); save(); toast("🎨", "Reset to default"); };
+cpReset.onclick = () => {
+  state.palette = "cozy"; state.customColors = null; state.uiTheme = "cozy";
+  clearAccentVars(); applyUITheme("cozy"); buildSwatches(); syncPickerUI();
+  save(); toast("🎨", "Reset to Cozy Brew");
+};
 
 [taskModal, memberModal].forEach(ov => ov.addEventListener("click", e => { if (e.target === ov) ov.classList.remove("show"); }));
 
-/* ---------- boot ---------- */
+/* ── Boot ── */
 load();
 initFirebase();
-applyTheme();
+applyUITheme(state.uiTheme || "cozy");
+if (state.customColors) {
+  setAccentVars(state.customColors.accent, state.customColors.accent2, state.customColors.bg, state.customColors.card);
+} else if (state.palette && THEMES[state.palette]) {
+  setAccentVars(THEMES[state.palette].accent, THEMES[state.palette].accent2);
+}
 greet();
 moodPick.querySelector('[data-m="🚀"]').classList.add("sel");
 renderAll();
