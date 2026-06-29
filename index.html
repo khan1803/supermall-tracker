@@ -166,9 +166,7 @@ body[data-ui="tasky"] .icon-btn {
   border: 2px solid rgba(22,64,58,.25);
 }
 body[data-ui="tasky"] .noon-badge {
-  border: 2.5px solid #16403a !important;
-  box-shadow: 3px 3px 0 rgba(22,64,58,.18) !important;
-  border-radius: 14px !important;
+  box-shadow: 2px 2px 0 rgba(22,64,58,.15) !important;
 }
 body[data-ui="tasky"] input,
 body[data-ui="tasky"] textarea,
@@ -260,7 +258,7 @@ body[data-ui="tasky"][data-tasky-sub="peri"] {
 /* ─── Reset ─── */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--body-font, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -271,13 +269,11 @@ body {
 
 /* ─── Header ─── */
 header {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: nowrap;
 }
 .brand { display: flex; align-items: center; gap: 14px; }
 .noon-badge {
   display: flex; align-items: center;
-  border-radius: 12px; overflow: hidden;
-  box-shadow: var(--shadow);
   flex-shrink: 0;
 }
 .brand-info h1 { font-size: 20px; font-weight: 800; letter-spacing: -.4px; }
@@ -386,7 +382,7 @@ body[data-ui="volt"] .btn { color: #000; }
 .btn.sm { padding: 7px 14px; font-size: 12.5px; }
 
 /* ─── Day columns ─── */
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .col {
   background: var(--card); border-radius: var(--radius);
   padding: 18px; box-shadow: var(--shadow-sm);
@@ -420,14 +416,21 @@ body[data-ui="volt"] .btn { color: #000; }
   font-size: 11px; padding: 3px 9px; border-radius: 999px;
   background: var(--bg); color: var(--muted); font-weight: 700;
 }
-.tag.p-high { color: var(--red); background: rgba(232,76,76,.1); }
-.tag.p-med  { color: var(--yellow); background: rgba(244,188,28,.12); }
-.tag.p-low  { color: var(--green); background: rgba(90,184,90,.1); }
+.tag.p-high { color: #c2410c; background: rgba(234,88,12,.13); }
+.tag.p-med  { color: #1d4ed8; background: rgba(59,130,246,.13); }
+.tag.p-low  { color: #475569; background: rgba(71,85,105,.1); }
 .tag.who    { color: var(--accent); background: rgba(232,114,42,.1); }
 body[data-ui="mint"]  .tag.who { background: rgba(30,158,110,.1); }
 body[data-ui="candy"] .tag.who { background: rgba(217,79,158,.1); }
 body[data-ui="volt"]  .tag.who { background: rgba(200,244,0,.1); color: var(--accent); }
 .tag.overdue { color: var(--red); background: rgba(232,76,76,.1); }
+/* Task status */
+.task.not-picked  { border-left: 3.5px solid #ef4444; }
+.task.in-progress { border-left: 3.5px solid #f59e0b; }
+.task.done        { border-left: 3.5px solid #22c55e; }
+.status-dot-np  { background: #ef4444; }
+.status-dot-ip  { background: #f59e0b; }
+.status-dot-dn  { background: #22c55e; }
 .task-x {
   opacity: 0; background: none; border: none; color: var(--muted);
   cursor: pointer; font-size: 15px; padding: 3px 7px; border-radius: 7px; transition: .15s;
@@ -500,33 +503,48 @@ body[data-ui="volt"] .seg button.active { color: #000; }
 }
 .overlay.show { display: grid; }
 .modal {
-  background: var(--bg-soft); border-radius: var(--radius); padding: 28px; width: 100%;
+  background: var(--bg-soft); border-radius: var(--radius); padding: 18px 20px; width: 100%;
   max-width: 460px; box-shadow: var(--shadow-lg); animation: pop .22s ease both;
+  max-height: 90vh; overflow-y: auto;
 }
 @keyframes pop { from { transform: scale(.94) translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
-.modal h2 { font-size: 20px; font-weight: 900; margin-bottom: 20px; }
-.field { margin-bottom: 14px; }
+.modal h2 { font-size: 17px; font-weight: 900; margin-bottom: 12px; }
+.field { margin-bottom: 8px; }
 .field label {
-  display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px;
+  display: block; font-size: 10px; color: var(--muted); margin-bottom: 4px;
   font-weight: 800; text-transform: uppercase; letter-spacing: .5px;
 }
 .field input, .field select, .field textarea { width: 100%; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
 
-/* Quick-add who pills */
-.qa-who-wrap { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+/* Quick-add who dropdown */
+.qa-who-wrap { display: flex; align-items: center; gap: 7px; }
 .qa-who-wrap .lbl { font-size: 12px; color: var(--muted); white-space: nowrap; font-weight: 700; }
-.qa-pill {
-  padding: 7px 14px; border-radius: 999px; border: 2px solid var(--line);
-  font-size: 12.5px; cursor: pointer; background: var(--bg-soft); color: var(--muted);
-  transition: .15s; white-space: nowrap; font-weight: 700;
+.who-dropdown { position: relative; }
+.who-dd-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 14px; border-radius: var(--radius-sm); border: 2px solid var(--line);
+  background: var(--bg-soft); color: var(--text); cursor: pointer;
+  font-size: 13px; font-weight: 700; font-family: inherit; white-space: nowrap;
+  transition: .15s; max-width: 200px;
 }
-.qa-pill:hover { border-color: var(--accent); color: var(--text); }
-.qa-pill.sel { border-color: var(--accent); color: var(--accent); background: var(--stat1-bg); }
-body[data-ui="mint"]  .qa-pill.sel { background: var(--stat1-bg); }
-body[data-ui="candy"] .qa-pill.sel { background: var(--stat1-bg); }
-body[data-ui="volt"]  .qa-pill.sel { background: var(--stat1-bg); }
+.who-dd-btn:hover { border-color: var(--accent); }
+.who-dd-btn .arrow { opacity: .5; font-size: 10px; }
+.who-dd-list {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 30;
+  background: var(--card); border: 2px solid var(--line); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow); padding: 6px; min-width: 160px; max-height: 220px;
+  overflow-y: auto; display: none; flex-direction: column; gap: 2px;
+}
+.who-dd-list.open { display: flex; }
+.who-dd-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: var(--radius-xs); cursor: pointer;
+  font-size: 13px; font-weight: 700; transition: background .12s;
+}
+.who-dd-item:hover { background: var(--bg); }
+.who-dd-item input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 
 /* Modal who checkboxes */
 .who-list { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -607,11 +625,17 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
 .cp-field input[type=text] { width: 100%; }
 .cpanel-overlay { position: fixed; inset: 0; z-index: 69; display: none; }
 .cpanel-overlay.open { display: block; }
+/* Font picker */
+.font-sub-lbl { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin: 10px 0 5px; }
+.font-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+.font-btn { padding: 7px 10px; border-radius: 9px; border: 2px solid var(--line); background: var(--card); cursor: pointer; font-size: 13px; font-weight: 600; text-align: left; transition: .15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.font-btn:hover:not(.active) { border-color: var(--accent); }
+.font-btn.active { border-color: var(--accent); background: var(--stat1-bg); color: var(--accent); }
 
 /* ─── Responsive ─── */
 @media (max-width: 760px) {
   .stats { grid-template-columns: 1fr 1fr; }
-  .cols  { grid-template-columns: 1fr; }
+  .cols  { grid-template-columns: 1fr; gap: 12px; }
   .row2  { grid-template-columns: 1fr; }
   .cpanel { width: 100%; right: -100%; }
   .tabs { display: flex; flex-wrap: wrap; border-radius: var(--radius-sm); width: 100%; }
@@ -626,11 +650,10 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
   <header>
     <div class="brand">
       <div class="noon-badge">
-        <svg width="58" height="58" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0,0 58,0 58,44 44,58 0,58" fill="#2323CC"/>
-          <text x="7" y="16" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="9.5" letter-spacing="0.2">noon</text>
-          <text x="5" y="33" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="13">super</text>
-          <text x="5" y="49" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="13">mall</text>
+        <svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="0,0 52,0 52,38 38,52 0,52" fill="#2323CC"/>
+          <text x="4" y="22" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="15" letter-spacing="0.1">super</text>
+          <text x="4" y="44" fill="#FFE600" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="15" letter-spacing="0.1">mall</text>
         </svg>
       </div>
       <div class="brand-info">
@@ -656,7 +679,7 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
   <!-- ── TODAY ── -->
   <div class="view active" id="view-today">
     <div class="stats">
-      <div class="stat"><span class="s-icon">📌</span><div class="big" id="sTodayTotal">0</div><div class="lbl">Planned for today</div></div>
+      <div class="stat"><span class="s-icon">📌</span><div class="big" id="sTodayTotal">0</div><div class="lbl">Total tasks</div></div>
       <div class="stat"><span class="s-icon">✅</span><div class="big" id="sTodayDone">0</div><div class="lbl">Done today</div></div>
       <div class="stat"><span class="s-icon">🎯</span><div class="big" id="sTodayPct">0%</div><div class="lbl">Day progress</div></div>
       <div class="stat"><span class="s-icon">⚠️</span><div class="big" id="sOverdue">0</div><div class="lbl">Overdue</div></div>
@@ -664,20 +687,31 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
 
     <div class="quickadd">
       <input type="text" id="qaTitle" placeholder="Add a task for today… (Enter to add)">
-      <select id="qaCat"><option value="work">💼 Work</option><option value="personal">🏠 Personal</option></select>
+
       <select id="qaPrio"><option value="med">Medium</option><option value="high">High</option><option value="low">Low</option></select>
-      <div class="qa-who-wrap"><span class="lbl">Assign:</span><div id="qaWhoList"></div></div>
+      <div class="qa-who-wrap"><span class="lbl">Assign:</span>
+        <div class="who-dropdown" id="whoDropdown">
+          <button class="who-dd-btn" id="whoDropBtn" type="button">
+            <span id="whoDropLabel">Me</span><span class="arrow">▾</span>
+          </button>
+          <div class="who-dd-list" id="whoDropList"></div>
+        </div>
+      </div>
       <button class="btn" id="qaAdd">Add ✨</button>
     </div>
 
     <div class="cols">
       <div class="col">
-        <div class="col-head"><span class="dot" style="background:var(--blue)"></span><h3>💼 Professional</h3><span class="count" id="cntWork">0</span></div>
-        <div id="todayWork"></div>
+        <div class="col-head"><span class="dot status-dot-np"></span><h3>Not Picked</h3><span class="count" id="cntNotPicked">0</span></div>
+        <div id="todayNotPicked"></div>
       </div>
       <div class="col">
-        <div class="col-head"><span class="dot" style="background:var(--accent-3)"></span><h3>🏠 Personal</h3><span class="count" id="cntPersonal">0</span></div>
-        <div id="todayPersonal"></div>
+        <div class="col-head"><span class="dot status-dot-ip"></span><h3>In Progress</h3><span class="count" id="cntInProgress">0</span></div>
+        <div id="todayInProgress"></div>
+      </div>
+      <div class="col">
+        <div class="col-head"><span class="dot status-dot-dn"></span><h3>Completed</h3><span class="count" id="cntDoneToday">0</span></div>
+        <div id="todayDoneList"></div>
       </div>
     </div>
   </div>
@@ -685,15 +719,11 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
   <!-- ── TASKS ── -->
   <div class="view" id="view-tasks">
     <div class="filters">
-      <div class="seg" id="segCat">
-        <button class="active" data-f="all">All</button>
-        <button data-f="work">💼 Work</button>
-        <button data-f="personal">🏠 Personal</button>
-      </div>
       <div class="seg" id="segStatus">
-        <button class="active" data-f="all">Any status</button>
-        <button data-f="open">Open</button>
-        <button data-f="done">Done</button>
+        <button class="active" data-f="all">All</button>
+        <button data-f="not-picked">🔴 Not Picked</button>
+        <button data-f="in-progress">🟡 In Progress</button>
+        <button data-f="done">🟢 Completed</button>
       </div>
       <select id="segWho" style="width:auto"><option value="all">Anyone</option></select>
       <div class="spacer" style="flex:1"></div>
@@ -704,15 +734,14 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
 
   <!-- ── TEAM ── -->
   <div class="view" id="view-team">
-    <div class="stats">
+    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
       <div class="stat"><span class="s-icon">👥</span><div class="big" id="sMembers">0</div><div class="lbl">Team members</div></div>
       <div class="stat"><span class="s-icon">📋</span><div class="big" id="sTeamActive">0</div><div class="lbl">Active team tasks</div></div>
-      <div class="stat"><span class="s-icon">⚡</span><div class="big" id="sTeamEff">0%</div><div class="lbl">Avg. efficiency</div></div>
-      <div class="stat"><span class="s-icon">⏱️</span><div class="big" id="sTeamOnTime">0%</div><div class="lbl">On-time rate</div></div>
+      <div class="stat"><span class="s-icon">⚡</span><div class="big" id="sTeamEff">0%</div><div class="lbl">Avg. completion</div></div>
     </div>
     <div class="section-head">
       <h2>Your team</h2>
-      <span class="sub">Efficiency = completed vs. assigned, weighted by on-time delivery</span>
+      <span class="sub">Completion = tasks done vs. assigned</span>
       <div class="spacer" style="flex:1"></div>
       <button class="btn" id="newMemberBtn">+ Add member</button>
     </div>
@@ -745,18 +774,30 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
     <div class="field"><label>Task</label><input id="tTitle" placeholder="e.g. Draft Q3 roadmap"></div>
     <div class="field"><label>Notes</label><textarea id="tNotes" placeholder="Optional details…" style="min-height:60px"></textarea></div>
     <div class="row2">
-      <div class="field"><label>Category</label><select id="tCat"><option value="work">💼 Professional</option><option value="personal">🏠 Personal</option></select></div>
+<input type="hidden" id="tCat" value="work">
       <div class="field"><label>Priority</label><select id="tPrio"><option value="high">High</option><option value="med" selected>Medium</option><option value="low">Low</option></select></div>
     </div>
-    <div class="field"><label>Assignees</label><div id="tWhoList" class="who-list"></div></div>
-    <div class="field"><label>Due date</label><input type="date" id="tDue" style="width:100%"></div>
-    <div class="row2">
-      <div class="field"><label>Progress: <span id="tProgVal">0</span>%</label><input type="range" id="tProg" min="0" max="100" value="0"></div>
-      <div class="field"><label>Plan for today?</label><select id="tToday"><option value="no">No</option><option value="yes">Yes</option></select></div>
+    <div class="field"><label>Assignees</label>
+      <div class="who-dropdown" id="editWhoWrapper">
+        <button class="who-dd-btn" id="editWhoDropBtn" type="button" style="width:100%;justify-content:space-between">
+          <span id="editWhoDropLabel">Me</span><span style="opacity:.5">▾</span>
+        </button>
+        <div class="who-dd-list" id="tWhoList" style="width:100%"></div>
+      </div>
     </div>
+    <div class="field"><label>Due date</label><input type="date" id="tDue" style="width:100%"></div>
     <div class="modal-actions">
       <button class="btn ghost" id="tCancel">Cancel</button>
       <button class="btn" id="tSave">Save task</button>
+    </div>
+    <!-- Task updates log (shown only when editing) -->
+    <div id="taskUpdatesSection" style="display:none;margin-top:22px;border-top:2px solid var(--line);padding-top:18px">
+      <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.5px;margin-bottom:10px;text-transform:uppercase">📋 Updates Log</div>
+      <div id="taskUpdatesList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:200px;overflow-y:auto"></div>
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <textarea id="taskUpdateInput" placeholder="Add an update to this task…" style="flex:1;min-height:56px;resize:none;padding:10px 12px;border-radius:var(--radius-sm);border:2px solid var(--line);background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;font-weight:600;outline:none;transition:.15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--line)'"></textarea>
+        <button class="btn" style="height:40px;padding:0 18px;align-self:flex-end" onclick="addTaskUpdate()">Post</button>
+      </div>
     </div>
   </div>
 </div>
@@ -818,6 +859,12 @@ body[data-ui="candy"] .who-check.checked { background: var(--stat1-bg); }
     </div>
   </div>
 
+  <div class="section-lbl" style="margin-top:18px">Font</div>
+  <div class="font-sub-lbl">Professional</div>
+  <div class="font-grid" id="fontGridPro"></div>
+  <div class="font-sub-lbl" style="margin-top:8px">Casual</div>
+  <div class="font-grid" id="fontGridCasual"></div>
+
   <div style="margin-top:22px;display:flex;gap:10px">
     <button class="btn" id="cpApply" style="flex:1">Apply</button>
     <button class="btn ghost" id="cpReset">Reset</button>
@@ -837,7 +884,7 @@ const AVATAR_COLORS = ["#e8722a","#1e9e6e","#d94f9e","#4c8ee8","#5ab85a","#f4bc1
 let state = {
   tasks: [], team: [], updates: [],
   uiTheme: "cozy", taskySub: "mint", palette: "cozy", customColors: null,
-  streak: 0, lastActive: null, mood: "🚀",
+  streak: 0, lastActive: null, mood: "🚀", fontFamily: "Nunito",
 };
 
 /* ── Firebase ── */
@@ -864,7 +911,11 @@ function initFirebase() {
       isRemoteUpdate = true;
       SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
       // migrate
-      state.tasks.forEach(t => { if (typeof t.who === "string") t.who = [t.who]; });
+      state.tasks.forEach(t => {
+    if (typeof t.who === "string") t.who = [t.who];
+    if (t.cat === "personal") t.cat = "work";
+    if (t.status === "open") t.status = (t.taskUpdates && t.taskUpdates.length) ? "in-progress" : "not-picked";
+  });
       localStorage.setItem(LS, JSON.stringify(state));
       renderAll();
       isRemoteUpdate = false;
@@ -889,7 +940,11 @@ function load() {
     if (d) state = Object.assign(state, d);
   } catch (e) {}
   if (!state.team.length && !state.tasks.length) seed();
-  state.tasks.forEach(t => { if (typeof t.who === "string") t.who = [t.who]; });
+  state.tasks.forEach(t => {
+    if (typeof t.who === "string") t.who = [t.who];
+    if (t.cat === "personal") t.cat = "work";
+    if (t.status === "open") t.status = (t.taskUpdates && t.taskUpdates.length) ? "in-progress" : "not-picked";
+  });
 }
 function save() {
   localStorage.setItem(LS, JSON.stringify(state));
@@ -906,16 +961,17 @@ function seed() {
   state.team = [a, b];
   const t = todayStr();
   state.tasks = [
-    { id: uid(), title: "Review the sprint plan",   cat: "work",     prio: "high", who: ["me"],   due: t,            prog: 40, status: "open", today: true,  createdAt: Date.now() },
-    { id: uid(), title: "Gym session",               cat: "personal", prio: "med",  who: ["me"],   due: t,            prog: 0,  status: "open", today: true,  createdAt: Date.now() },
-    { id: uid(), title: "Ship payments API",         cat: "work",     prio: "high", who: [a.id],   due: t,            prog: 70, status: "open", today: false, createdAt: Date.now() },
-    { id: uid(), title: "Onboarding redesign",       cat: "work",     prio: "med",  who: [b.id],   due: addDays(t,2), prog: 30, status: "open", today: false, createdAt: Date.now() },
+    { id: uid(), title: "Review the sprint plan",   cat: "work",     prio: "high", who: ["me"],   due: t,            prog: 40, status: "not-picked", today: true,  createdAt: Date.now() },
+    { id: uid(), title: "Gym session",               cat: "work",     prio: "med",  who: ["me"],   due: t,            prog: 0,  status: "not-picked", today: true,  createdAt: Date.now() },
+    { id: uid(), title: "Ship payments API",         cat: "work",     prio: "high", who: [a.id],   due: t,            prog: 70, status: "not-picked", today: false, createdAt: Date.now() },
+    { id: uid(), title: "Onboarding redesign",       cat: "work",     prio: "med",  who: [b.id],   due: addDays(t,2), prog: 30, status: "not-picked", today: false, createdAt: Date.now() },
   ];
 }
 
 /* ── Dates ── */
 function addDays(iso, n) { const d = new Date(iso); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
-function fmtDate(iso) { return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); }
+function fmtDate(ts) { return new Date(ts).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); }
+function fmtShort(ts) { return new Date(ts).toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
 function dueLabel(iso) {
   if (!iso) return null;
   const today = todayStr();
@@ -947,24 +1003,47 @@ function whoName(id) {
 function toArr(who) { return Array.isArray(who) ? who : (who ? [who] : ["me"]); }
 function whoNames(who) { return toArr(who).map(whoName).join(", "); }
 
-/* ── Quick-add who pills ── */
+/* ── Quick-add who dropdown ── */
 let qaWhoSelected = ["me"];
 function fillQaWhoList() {
   const people = [{ id: "me", name: "Me" }, ...state.team.map(m => ({ id: m.id, name: m.name.split(" ")[0] }))];
-  qaWhoList.innerHTML = people.map(p =>
-    `<span class="qa-pill ${qaWhoSelected.includes(p.id) ? "sel" : ""}" data-id="${p.id}">${esc(p.name)}</span>`
-  ).join("");
-  qaWhoList.querySelectorAll(".qa-pill").forEach(pill => {
-    pill.addEventListener("click", () => {
-      const id = pill.dataset.id;
-      if (qaWhoSelected.includes(id)) {
-        if (qaWhoSelected.length === 1) return;
-        qaWhoSelected = qaWhoSelected.filter(x => x !== id);
-      } else {
+  const list = document.getElementById("whoDropList");
+  const lbl  = document.getElementById("whoDropLabel");
+  if (!list || !lbl) return;
+  list.innerHTML = people.map(p => {
+    const checked = qaWhoSelected.includes(p.id);
+    return `<label class="who-dd-item">
+      <input type="checkbox" value="${p.id}" ${checked ? "checked" : ""}> ${esc(p.name)}
+    </label>`;
+  }).join("");
+  list.querySelectorAll("input").forEach(cb => {
+    cb.addEventListener("change", () => {
+      const id = cb.value;
+      if (cb.checked) {
         qaWhoSelected = [...qaWhoSelected, id];
+      } else {
+        if (qaWhoSelected.length === 1) { cb.checked = true; return; }
+        qaWhoSelected = qaWhoSelected.filter(x => x !== id);
       }
-      fillQaWhoList();
+      updateDropLabel();
     });
+  });
+  updateDropLabel();
+}
+function updateDropLabel() {
+  const lbl = document.getElementById("whoDropLabel");
+  if (!lbl) return;
+  const names = qaWhoSelected.map(id => id === "me" ? "Me" : (state.team.find(m => m.id === id)?.name.split(" ")[0] || "?"));
+  lbl.textContent = names.length > 2 ? `${names.slice(0,2).join(", ")} +${names.length-2}` : names.join(", ");
+}
+function initWhoDropdown() {
+  const btn  = document.getElementById("whoDropBtn");
+  const list = document.getElementById("whoDropList");
+  if (!btn || !list) return;
+  btn.addEventListener("click", e => { e.stopPropagation(); list.classList.toggle("open"); });
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#whoDropdown")) list.classList.remove("open");
+    if (!e.target.closest("#editWhoWrapper")) { const el = document.getElementById("tWhoList"); if (el) el.classList.remove("open"); }
   });
 }
 
@@ -972,19 +1051,20 @@ function fillQaWhoList() {
 function quickAdd() {
   const title = qaTitle.value.trim();
   if (!title) return;
-  state.tasks.push({ id: uid(), title, cat: qaCat.value, prio: qaPrio.value, who: [...qaWhoSelected],
-    due: todayStr(), prog: 0, status: "open", today: true, createdAt: Date.now() });
+  state.tasks.push({ id: uid(), title, cat: 'work', prio: qaPrio.value, who: [...qaWhoSelected],
+    due: todayStr(), prog: 0, status: "not-picked", today: true, createdAt: Date.now() });
   qaTitle.value = "";
   touchStreak(); save(); renderAll();
   toast("➕", "Added to today");
 }
 function toggleTask(id) {
   const t = state.tasks.find(x => x.id === id); if (!t) return;
-  if (t.status === "done") { t.status = "open"; t.completedAt = null; }
-  else {
-    t.status = "done"; t.prog = 100; t.completedAt = Date.now();
-    t.onTime = t.due ? (todayStr() <= t.due) : true;
-    toast("✅", "Nice — task complete!");
+  if (t.status === "done") {
+    t.status = (t.taskUpdates && t.taskUpdates.length) ? "in-progress" : "not-picked";
+    t.completedAt = null; t.reopenedAt = Date.now();
+  } else {
+    t.status = "done"; t.prog = 100;
+    t.completedAt = Date.now(); toast("✅", "Nice — task complete!");
   }
   touchStreak(); save(); renderAll();
 }
@@ -1004,9 +1084,13 @@ function openTaskModal(task) {
   tPrio.value  = task ? task.prio  : "med";
   fillWhoCheckboxes(task ? toArr(task.who) : ["me"]);
   tDue.value   = task ? (task.due || "") : todayStr();
-  tProg.value  = task ? task.prog : 0; tProgVal.textContent = tProg.value;
-  tToday.value = task ? (task.today ? "yes" : "no") : "yes";
   taskModal.classList.add("show");
+  // Show updates log only for existing tasks
+  const updSec = document.getElementById("taskUpdatesSection");
+  if (updSec) {
+    if (task) { updSec.style.display = "block"; renderTaskUpdates(task.id); }
+    else { updSec.style.display = "none"; }
+  }
 }
 function saveTask() {
   const title = tTitle.value.trim();
@@ -1014,14 +1098,13 @@ function saveTask() {
   const who = Array.from(tWhoList.querySelectorAll("input:checked")).map(x => x.value);
   if (!who.length) { toast("✏️", "Select at least one assignee"); return; }
   const data = { title, notes: tNotes.value.trim(), cat: tCat.value, prio: tPrio.value, who,
-    due: tDue.value || null, prog: +tProg.value, today: tToday.value === "yes" };
+    due: tDue.value || null };
   if (tEditId.value) {
     const t = state.tasks.find(x => x.id === tEditId.value);
     Object.assign(t, data);
-    if (t.prog === 100 && t.status !== "done") { t.status = "done"; t.completedAt = Date.now(); t.onTime = t.due ? todayStr() <= t.due : true; }
-    if (t.prog < 100  && t.status === "done")  { t.status = "open"; t.completedAt = null; }
+    t.updatedAt = Date.now();
   } else {
-    state.tasks.push(Object.assign({ id: uid(), status: data.prog === 100 ? "done" : "open", createdAt: Date.now() }, data));
+    state.tasks.push(Object.assign({ id: uid(), status: "not-picked", prog: 0, today: true, createdAt: Date.now() }, data));
   }
   taskModal.classList.remove("show");
   touchStreak(); save(); renderAll();
@@ -1063,53 +1146,60 @@ function memberStats(id) {
   const open = ts.filter(t => t.status !== "done");
   const total = ts.length;
   const completion = total ? Math.round(done.length / total * 100) : 0;
-  const withDue    = done.filter(t => t.onTime !== undefined);
-  const onTime     = withDue.length ? Math.round(withDue.filter(t => t.onTime).length / withDue.length * 100) : 100;
   const avgProg    = open.length ? Math.round(open.reduce((s, t) => s + (t.prog || 0), 0) / open.length) : 0;
-  const eff        = Math.round(completion * 0.65 + onTime * 0.35);
-  return { total, done: done.length, open: open.length, completion, onTime, avgProg, eff, openTasks: open };
+  return { total, done: done.length, open: open.length, completion, avgProg, openTasks: open };
 }
 
 /* ── Rendering ── */
 function taskRow(t) {
   const dl = dueLabel(t.due);
   const overdue = dl && dl.over && t.status !== "done";
-  const prioTag = `<span class="tag p-${t.prio === "high" ? "high" : t.prio === "low" ? "low" : "med"}">${t.prio === "high" ? "🔴 High" : t.prio === "low" ? "🟢 Low" : "🟡 Med"}</span>`;
+  const prioTag = t.prio === "high" ? `<span class="tag p-high">▲ High</span>` : t.prio === "low" ? `<span class="tag p-low">▽ Low</span>` : `<span class="tag p-med">■ Med</span>`;
   const whoTag  = toArr(t.who).filter(id => id !== "me").map(id => `<span class="tag who">@${esc(whoName(id))}</span>`).join("");
   const dueTag  = dl ? `<span class="tag ${overdue ? "overdue" : ""}">${dl.txt}</span>` : "";
   const progTag = (t.status !== "done" && t.prog > 0) ? `<span class="tag">${t.prog}%</span>` : "";
-  return `<div class="task ${t.status === "done" ? "done" : ""}">
+  const createdTag = t.createdAt ? `<span class="tag" style="opacity:.6" title="Added ${fmtDate(t.createdAt)}">📅 ${fmtShort(t.createdAt)}</span>` : "";
+  const timeLog = (() => {
+    const parts = [];
+    if (t.completedAt) parts.push(`<span class="tag" style="opacity:.65" title="Closed">✅ ${fmtDate(t.completedAt)}</span>`);
+    if (t.updatedAt && !t.completedAt) parts.push(`<span class="tag" style="opacity:.65" title="Last edited">✏️ ${fmtDate(t.updatedAt)}</span>`);
+    if (t.reopenedAt && t.status !== "done") parts.push(`<span class="tag" style="opacity:.65" title="Reopened">🔄 ${fmtDate(t.reopenedAt)}</span>`);
+    return parts.join("");
+  })();
+  const stClass = t.status === "done" ? "done" : t.status === "in-progress" ? "in-progress" : "not-picked";
+  return `<div class="task ${stClass}">
     <div class="check ${t.status === "done" ? "done" : ""}" onclick="toggleTask('${t.id}')">${t.status === "done" ? "✓" : ""}</div>
     <div class="task-main" onclick="editTaskById('${t.id}')">
       <div class="task-title">${esc(t.title)}</div>
-      <div class="task-meta">${prioTag}${whoTag}${dueTag}${progTag}</div>
+      <div class="task-meta">${prioTag}${whoTag}${dueTag}${progTag}${createdTag}${timeLog}</div>
     </div>
     <button class="task-x" onclick="delTask('${t.id}')">✕</button>
   </div>`;
 }
 
 function renderToday() {
-  const todays   = state.tasks.filter(t => t.today || t.due === todayStr());
-  const work     = todays.filter(t => t.cat === "work");
-  const personal = todays.filter(t => t.cat === "personal");
-  const sortFn   = (a, b) => (a.status === "done") - (b.status === "done") || ({high:0,med:1,low:2}[a.prio] - {high:0,med:1,low:2}[b.prio]);
-  work.sort(sortFn); personal.sort(sortFn);
-  todayWork.innerHTML     = work.length     ? work.map(taskRow).join("")     : `<div class="empty">No work tasks for today 🌤️</div>`;
-  todayPersonal.innerHTML = personal.length ? personal.map(taskRow).join("") : `<div class="empty">Nothing personal planned ✨</div>`;
-  cntWork.textContent = work.length; cntPersonal.textContent = personal.length;
-  const done = todays.filter(t => t.status === "done").length;
-  sTodayTotal.textContent = todays.length;
-  sTodayDone.textContent  = done;
-  sTodayPct.textContent   = (todays.length ? Math.round(done / todays.length * 100) : 0) + "%";
-  sOverdue.textContent    = state.tasks.filter(t => t.status !== "done" && t.due && t.due < todayStr()).length;
+  const all  = state.tasks;
+  const sortFn = (a,b) => ({high:0,med:1,low:2}[a.prio] - {high:0,med:1,low:2}[b.prio]);
+  const notPicked  = all.filter(t => t.status === "not-picked").sort(sortFn);
+  const inProgress = all.filter(t => t.status === "in-progress").sort(sortFn);
+  const doneList   = all.filter(t => t.status === "done").sort(sortFn);
+  document.getElementById("todayNotPicked").innerHTML  = notPicked.length  ? notPicked.map(taskRow).join("")  : `<div class="empty">No tasks here ✨</div>`;
+  document.getElementById("todayInProgress").innerHTML = inProgress.length ? inProgress.map(taskRow).join("") : `<div class="empty">None in progress</div>`;
+  document.getElementById("todayDoneList").innerHTML   = doneList.length   ? doneList.map(taskRow).join("")   : `<div class="empty">None completed yet</div>`;
+  document.getElementById("cntNotPicked").textContent  = notPicked.length;
+  document.getElementById("cntInProgress").textContent = inProgress.length;
+  document.getElementById("cntDoneToday").textContent  = doneList.length;
+  const total = all.length;
+  sTodayTotal.textContent = total;
+  sTodayDone.textContent  = doneList.length;
+  sTodayPct.textContent   = (total ? Math.round(doneList.length / total * 100) : 0) + "%";
+  sOverdue.textContent    = all.filter(t => t.status !== "done" && t.due && t.due < todayStr()).length;
 }
 
-let filterCat = "all", filterStatus = "all", filterWho = "all";
+let filterStatus = "all", filterWho = "all";
 function renderTasks() {
   let list = state.tasks.slice();
-  if (filterCat    !== "all") list = list.filter(t => t.cat === filterCat);
-  if (filterStatus === "open") list = list.filter(t => t.status !== "done");
-  if (filterStatus === "done") list = list.filter(t => t.status === "done");
+  if (filterStatus !== "all") list = list.filter(t => t.status === filterStatus);
   if (filterWho    !== "all") list = list.filter(t => toArr(t.who).includes(filterWho));
   list.sort((a, b) => (a.status === "done") - (b.status === "done") || (a.due || "9999").localeCompare(b.due || "9999"));
   taskList.innerHTML = list.length
@@ -1120,12 +1210,11 @@ function renderTasks() {
 function renderTeam() {
   const stats = state.team.map(m => ({ m, s: memberStats(m.id) }));
   sMembers.textContent    = state.team.length;
-  sTeamActive.textContent = state.tasks.filter(t => t.who !== "me" && t.status !== "done").length;
-  const effs = stats.filter(x => x.s.total > 0);
-  sTeamEff.textContent    = (effs.length ? Math.round(effs.reduce((s,x) => s+x.s.eff,   0) / effs.length) : 0) + "%";
-  sTeamOnTime.textContent = (effs.length ? Math.round(effs.reduce((s,x) => s+x.s.onTime,0) / effs.length) : 0) + "%";
+  sTeamActive.textContent = state.tasks.filter(t => t.status === 'in-progress').length;
+  const withTasks = stats.filter(x => x.s.total > 0);
+  sTeamEff.textContent = (withTasks.length ? Math.round(withTasks.reduce((s,x) => s+x.s.completion, 0) / withTasks.length) : 0) + "%";
   teamGrid.innerHTML = stats.map(({ m, s }) => {
-    const effColor = s.eff >= 75 ? "var(--green)" : s.eff >= 45 ? "var(--yellow)" : "var(--red)";
+    const effColor = s.completion >= 75 ? "var(--green)" : s.completion >= 40 ? "var(--yellow)" : "var(--red)";
     const initials = m.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
     const tasks    = s.openTasks.slice(0, 4).map(t =>
       `<div class="mtask">
@@ -1137,13 +1226,11 @@ function renderTeam() {
       <div class="member-top">
         <div class="avatar" style="background:${m.color}">${initials}</div>
         <div><h3>${esc(m.name)}</h3><div class="role">${esc(m.role || "Team member")}</div></div>
-        <div class="eff"><div class="num" style="color:${effColor}">${s.eff}%</div><div class="lbl">Efficiency</div></div>
+        <div class="eff"><div class="num" style="color:${effColor}">${s.completion}%</div><div class="lbl">Done</div></div>
       </div>
       <div class="meters">
         <div class="meter"><div class="meter-top"><span>Completion</span><b>${s.done}/${s.total} done</b></div>
           <div class="bar"><span style="width:${s.completion}%;background:var(--accent)"></span></div></div>
-        <div class="meter"><div class="meter-top"><span>On-time delivery</span><b>${s.onTime}%</b></div>
-          <div class="bar"><span style="width:${s.onTime}%;background:var(--accent-2)"></span></div></div>
         <div class="meter"><div class="meter-top"><span>Active progress</span><b>${s.open} open</b></div>
           <div class="bar"><span style="width:${s.avgProg}%;background:var(--blue)"></span></div></div>
       </div>
@@ -1160,12 +1247,27 @@ function renderTeam() {
   }).join("") || `<div class="empty">No team members yet. Add your first one ↑</div>`;
 }
 
+function delUpdate(id) {
+  state.updates = state.updates.filter(u => u.id !== id);
+  save(); renderAll();
+  toast("🗑️", "Update deleted");
+}
+window.delUpdate = delUpdate;
+
 function renderUpdates() {
   updatesTimeline.innerHTML = state.updates.length
-    ? state.updates.map(u => `<div class="log">
-        <div class="log-top"><span class="mood">${u.mood || "📝"}</span>
-          <b>${u.who ? esc(whoName(u.who)) : "General"}</b> · ${fmtDate(u.ts)}</div>
-        <p>${esc(u.text)}</p></div>`).join("")
+    ? state.updates.map(u => {
+        const taskChip = u.taskTitle ? `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;margin-top:6px">📌 ${esc(u.taskTitle)}</span>` : "";
+        return `<div class="log" style="position:relative">
+          <div class="log-top">
+            <span class="mood">${u.mood || "📝"}</span>
+            <b>${u.who ? esc(whoName(u.who)) : "General"}</b> · ${fmtDate(u.ts)}
+            <button onclick="delUpdate('${u.id}')" title="Delete update" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:14px;opacity:.4;padding:2px 6px;border-radius:6px;transition:.15s;" onmouseover="this.style.opacity=1;this.style.color='var(--red)'" onmouseout="this.style.opacity=.4;this.style.color=''">✕</button>
+          </div>
+          <p>${esc(u.text)}</p>
+          ${taskChip}
+        </div>`;
+      }).join("")
     : `<div class="empty">No updates yet. Log your first one above.</div>`;
 }
 
@@ -1180,15 +1282,26 @@ function postUpdate() {
 
 function fillWhoCheckboxes(selectedIds) {
   const people = [{ id: "me", name: "Me" }, ...state.team.map(m => ({ id: m.id, name: m.name.split(" ")[0] }))];
-  tWhoList.innerHTML = people.map(p => {
+  const list = document.getElementById("tWhoList");
+  if (!list) return;
+  list.innerHTML = people.map(p => {
     const checked = selectedIds.includes(p.id);
-    return `<label class="who-check ${checked ? "checked" : ""}">
-      <input type="checkbox" value="${p.id}" ${checked ? "checked" : ""}> ${esc(p.name)}
-    </label>`;
+    return `<label class="who-dd-item"><input type="checkbox" value="${p.id}" ${checked ? "checked" : ""}> ${esc(p.name)}</label>`;
   }).join("");
-  tWhoList.querySelectorAll("input").forEach(cb => cb.addEventListener("change", () =>
-    cb.closest(".who-check").classList.toggle("checked", cb.checked)
-  ));
+  list.querySelectorAll("input").forEach(cb => cb.addEventListener("change", updateEditWhoLabel));
+  const btn = document.getElementById("editWhoDropBtn");
+  if (btn) btn.onclick = e => { e.stopPropagation(); list.classList.toggle("open"); };
+  updateEditWhoLabel();
+}
+function updateEditWhoLabel() {
+  const lbl = document.getElementById("editWhoDropLabel");
+  if (!lbl) return;
+  const names = Array.from(document.querySelectorAll("#tWhoList input:checked")).map(cb =>
+    cb.value === "me" ? "Me" : (state.team.find(m => m.id === cb.value)?.name.split(" ")[0] || "?")
+  );
+  lbl.textContent = names.length === 0 ? "Nobody"
+    : names.length > 2 ? `${names.slice(0,2).join(", ")} +${names.length-2}`
+    : names.join(", ");
 }
 function fillAllSelects() {
   fillQaWhoList();
@@ -1204,10 +1317,53 @@ window.editMember    = id => openMemberModal(state.team.find(m => m.id === id));
 window.delMember     = delMember;
 window.assignTo      = id => {
   openTaskModal(null); tCat.value = "work";
-  tWhoList.querySelectorAll("input").forEach(cb => {
-    cb.checked = cb.value === id;
-    cb.closest(".who-check").classList.toggle("checked", cb.checked);
-  });
+  tWhoList.querySelectorAll("input").forEach(cb => { cb.checked = cb.value === id; });
+  updateEditWhoLabel();
+};
+
+/* ── Task update log ── */
+function addTaskUpdate() {
+  const taskId = tEditId.value;
+  if (!taskId) return;
+  const input = document.getElementById("taskUpdateInput");
+  const text = input.value.trim();
+  if (!text) { toast("✏️", "Write something first"); return; }
+  const task = state.tasks.find(t => t.id === taskId);
+  if (!task) return;
+  if (!task.taskUpdates) task.taskUpdates = [];
+  const uid2 = uid();
+  const ts = Date.now();
+  task.taskUpdates.unshift({ id: uid2, text, ts });
+  if (task.status !== 'done') task.status = 'in-progress';
+  // Also surface in global updates feed
+  state.updates.unshift({ id: uid2, text, taskId, taskTitle: task.title, mood: state.mood, ts, who: "me" });
+  input.value = "";
+  renderTaskUpdates(taskId);
+  save(); renderAll();
+  toast("📋", "Update posted");
+}
+function renderTaskUpdates(taskId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  const list = document.getElementById("taskUpdatesList");
+  if (!list) return;
+  const updates = (task && task.taskUpdates) || [];
+  list.innerHTML = updates.length
+    ? updates.map(u => `<div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:11px;color:var(--muted);font-weight:700">${fmtDate(u.ts)}</span>
+          <button onclick="delTaskUpdate('${taskId}','${u.id}')" style="background:none;border:none;cursor:pointer;font-size:13px;opacity:.4;padding:2px 5px;border-radius:4px;transition:.15s" onmouseover="this.style.opacity=1;this.style.color='var(--red)'" onmouseout="this.style.opacity=.4;this.style.color=''">✕</button>
+        </div>
+        <p style="margin:0;font-size:13px;font-weight:600;color:var(--text)">${esc(u.text)}</p>
+      </div>`).join("")
+    : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:10px 0">No updates yet</div>`;
+}
+window.addTaskUpdate = addTaskUpdate;
+window.delTaskUpdate = function(taskId, updateId) {
+  const task = state.tasks.find(t => t.id === taskId);
+  if (task) task.taskUpdates = (task.taskUpdates || []).filter(u => u.id !== updateId);
+  state.updates = state.updates.filter(u => u.id !== updateId);
+  renderTaskUpdates(taskId);
+  save(); renderAll();
 };
 
 function renderAll() {
@@ -1331,7 +1487,60 @@ function syncPickerUI() {
   if (/^#[0-9a-f]{6}$/i.test(cd)) { cpCard.value = cd; cpCardHex.value = cd; }
 }
 
-function openCpanel()  { cpanel.classList.add("open"); cpanelOverlay.classList.add("open"); buildSwatches(); buildUIThemeButtons(); syncPickerUI(); }
+/* ── Font picker ── */
+const FONTS = {
+  professional: [
+    { name: "Inter",             gf: "Inter:wght@400;600;700;800" },
+    { name: "Poppins",           gf: "Poppins:wght@400;500;600;700;800" },
+    { name: "Montserrat",        gf: "Montserrat:wght@400;600;700;800" },
+    { name: "Roboto",            gf: "Roboto:wght@400;500;700" },
+    { name: "Lato",              gf: "Lato:wght@400;700" },
+    { name: "Open Sans",         gf: "Open+Sans:wght@400;600;700;800" },
+    { name: "Raleway",           gf: "Raleway:wght@400;600;700;800" },
+    { name: "DM Sans",           gf: "DM+Sans:wght@400;500;600;700" },
+    { name: "Playfair Display",  gf: "Playfair+Display:wght@400;600;700" },
+    { name: "Source Sans 3",     gf: "Source+Sans+3:wght@400;600;700" },
+  ],
+  casual: [
+    { name: "Nunito",       gf: null },
+    { name: "Fredoka",      gf: null },
+    { name: "Comfortaa",    gf: "Comfortaa:wght@400;600;700" },
+    { name: "Quicksand",    gf: "Quicksand:wght@400;600;700" },
+    { name: "Pacifico",     gf: "Pacifico" },
+    { name: "Righteous",    gf: "Righteous" },
+    { name: "Josefin Sans", gf: "Josefin+Sans:wght@400;600;700" },
+    { name: "Baloo 2",      gf: "Baloo+2:wght@400;600;700;800" },
+    { name: "Caveat",       gf: "Caveat:wght@400;600;700" },
+    { name: "Patrick Hand", gf: "Patrick+Hand" },
+  ]
+};
+const _loadedFonts = new Set(["Nunito", "Fredoka"]);
+function loadFont(f) {
+  if (!f.gf || _loadedFonts.has(f.name)) return;
+  const l = document.createElement("link");
+  l.rel = "stylesheet";
+  l.href = `https://fonts.googleapis.com/css2?family=${f.gf}&display=swap`;
+  document.head.appendChild(l);
+  _loadedFonts.add(f.name);
+}
+function applyFont(name) {
+  state.fontFamily = name;
+  document.body.style.fontFamily = `'${name}', sans-serif`;
+  document.querySelectorAll(".font-btn").forEach(b => b.classList.toggle("active", b.dataset.font === name));
+  save();
+}
+window.applyFont = applyFont;
+function buildFontPicker() {
+  const cur = state.fontFamily || "Nunito";
+  [...FONTS.professional, ...FONTS.casual].forEach(f => loadFont(f));
+  const btn = f => `<button class="font-btn${cur===f.name?" active":""}" data-font="${f.name}" style="font-family:'${f.name}',sans-serif" onclick="applyFont('${f.name}')">${f.name}</button>`;
+  const pg = document.getElementById("fontGridPro");
+  const cg = document.getElementById("fontGridCasual");
+  if (pg) pg.innerHTML = FONTS.professional.map(btn).join("");
+  if (cg) cg.innerHTML = FONTS.casual.map(btn).join("");
+}
+
+function openCpanel()  { cpanel.classList.add("open"); cpanelOverlay.classList.add("open"); buildSwatches(); buildUIThemeButtons(); buildFontPicker(); syncPickerUI(); }
 function closeCpanel() { cpanel.classList.remove("open"); cpanelOverlay.classList.remove("open"); }
 
 function pickSwatch(key) {
@@ -1380,17 +1589,11 @@ qaTitle.addEventListener("keydown", e => { if (e.key === "Enter") quickAdd(); })
 newTaskBtn.onclick = () => openTaskModal(null);
 tCancel.onclick  = () => taskModal.classList.remove("show");
 tSave.onclick    = saveTask;
-tProg.addEventListener("input", () => tProgVal.textContent = tProg.value);
 newMemberBtn.onclick = () => openMemberModal(null);
 mCancel.onclick  = () => memberModal.classList.remove("show");
 mSave.onclick    = saveMember;
 postUpdateBtn.onclick = postUpdate;
 
-document.getElementById("segCat").addEventListener("click", e => {
-  if (e.target.tagName !== "BUTTON") return;
-  segCat.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-  e.target.classList.add("active"); filterCat = e.target.dataset.f; renderTasks();
-});
 document.getElementById("segStatus").addEventListener("click", e => {
   if (e.target.tagName !== "BUTTON") return;
   segStatus.querySelectorAll("button").forEach(b => b.classList.remove("active"));
@@ -1433,7 +1636,12 @@ cpReset.onclick = () => {
 /* ── Boot ── */
 load();
 initFirebase();
+initWhoDropdown();
 applyUITheme(state.uiTheme || "cozy", state.taskySub || "mint");
+if (state.fontFamily) {
+  const _af = [...FONTS.professional, ...FONTS.casual].find(f => f.name === state.fontFamily);
+  if (_af) { loadFont(_af); applyFont(state.fontFamily); }
+}
 if (state.customColors) {
   setAccentVars(state.customColors.accent, state.customColors.accent2, state.customColors.bg, state.customColors.card);
 } else if (state.palette && THEMES[state.palette]) {
