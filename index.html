@@ -914,36 +914,39 @@ function initFirebase() {
     firebase.initializeApp(FIREBASE_CONFIG);
     dbRef = firebase.database().ref('supermall-tracker');
 
-    // One-time read: decide whether local or remote wins, then start live listener
+    // One-time read on startup: Firebase is source of truth unless local is definitively newer AND bigger
     dbRef.once('value', snap => {
-      const remote = snap.val();
-      const localTs  = state.lastActive || 0;
-      const remoteTs = (remote && remote.lastActive) || 0;
-      const localLen  = (state.tasks || []).length;
-      const remoteLen = (remote && remote.tasks) ? remote.tasks.length : 0;
+      const remote    = snap.val();
+      const localTs   = state.lastActive || 0;
+      const remoteTs  = (remote && remote.lastActive) || 0;
+      const localSize = (state.tasks || []).length + (state.team || []).length;
+      const remSize   = remote ? ((remote.tasks || []).length + (remote.team || []).length) : 0;
 
-      if (remote && (remoteTs > localTs || (!localTs && remoteLen > localLen))) {
-        // Firebase is newer — load it
+      // Local only wins if it has data AND is strictly newer AND has at least as much data
+      const localWins = localSize > 0 && localTs > remoteTs && localSize >= remSize;
+
+      if (remote && !localWins) {
+        // Firebase wins — load it (default: Firebase is source of truth)
         SHARED_KEYS.forEach(k => { if (remote[k] !== undefined) state[k] = remote[k]; });
         migrateTaskList(state.tasks);
         localStorage.setItem(LS, JSON.stringify(state));
         renderAll();
-      } else if (localLen > 0) {
-        // Local is newer or has more data — push to Firebase
+      } else if (localSize > 0) {
+        // Local is definitively newer — push it to Firebase
         const shared = {};
         SHARED_KEYS.forEach(k => shared[k] = state[k]);
         dbRef.set(shared).catch(e => console.warn('Firebase write failed:', e));
       }
+      // (If both are empty, do nothing — user starts fresh)
 
-      // Live listener for changes from OTHER devices
+      // Live listener: apply any change from another device that is strictly newer
       dbRef.on('value', snap => {
         if (isRemoteUpdate) return;
         const data = snap.val();
         if (!data) return;
-        // Only apply if remote is genuinely newer than what we have now
-        const nowTs = state.lastActive || 0;
         const remTs = data.lastActive || 0;
-        if (remTs <= nowTs && (data.tasks || []).length <= (state.tasks || []).length) return;
+        const nowTs = state.lastActive || 0;
+        if (remTs <= nowTs) return; // filters our own writes (remTs === nowTs) and stale data
         isRemoteUpdate = true;
         SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
         migrateTaskList(state.tasks);
@@ -979,6 +982,7 @@ function load() {
   });
 }
 function save() {
+  state.lastActive = Date.now();
   localStorage.setItem(LS, JSON.stringify(state));
   if (dbRef && !isRemoteUpdate) {
     const shared = {};
