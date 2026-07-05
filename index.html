@@ -914,45 +914,31 @@ function initFirebase() {
     firebase.initializeApp(FIREBASE_CONFIG);
     dbRef = firebase.database().ref('supermall-tracker');
 
-    // One-time read on startup: Firebase is source of truth unless local is definitively newer AND bigger
+    // On startup: load from Firebase unconditionally — Firebase is the single source of truth.
+    // Never push local data to Firebase on startup (only user actions do that via save()).
+    // This prevents any stale localStorage from any device from overwriting shared data.
     dbRef.once('value', snap => {
-      const remote    = snap.val();
-      const localTs   = state.lastActive || 0;
-      const remoteTs  = (remote && remote.lastActive) || 0;
-      const localSize = (state.tasks || []).length + (state.team || []).length;
-      const remSize   = remote ? ((remote.tasks || []).length + (remote.team || []).length) : 0;
-
-      // Local only wins if it has data AND is strictly newer AND has at least as much data
-      const localWins = localSize > 0 && localTs > remoteTs && localSize >= remSize;
-
-      if (remote && !localWins) {
-        // Firebase wins — load it (default: Firebase is source of truth)
-        SHARED_KEYS.forEach(k => { if (remote[k] !== undefined) state[k] = remote[k]; });
-        migrateTaskList(state.tasks);
-        localStorage.setItem(LS, JSON.stringify(state));
-        renderAll();
-      } else if (localSize > 0) {
-        // Local is definitively newer — push it to Firebase
-        const shared = {};
-        SHARED_KEYS.forEach(k => shared[k] = state[k]);
-        dbRef.set(shared).catch(e => console.warn('Firebase write failed:', e));
-      }
-      // (If both are empty, do nothing — user starts fresh)
-
-      // Live listener: apply any change from another device that is strictly newer
-      dbRef.on('value', snap => {
-        if (isRemoteUpdate) return;
-        const data = snap.val();
-        if (!data) return;
-        const remTs = data.lastActive || 0;
-        const nowTs = state.lastActive || 0;
-        if (remTs <= nowTs) return; // filters our own writes (remTs === nowTs) and stale data
-        isRemoteUpdate = true;
+      const data = snap.val();
+      if (data) {
         SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
         migrateTaskList(state.tasks);
         localStorage.setItem(LS, JSON.stringify(state));
         renderAll();
-        isRemoteUpdate = false;
+      }
+
+      // Live listener: apply Firebase updates from any device.
+      // Only skip data that is strictly older than current state
+      // (prevents a slow/stale Firebase echo from rolling back a rapid local save).
+      dbRef.on('value', snap => {
+        const data = snap.val();
+        if (!data) return;
+        const remTs = data.lastActive || 0;
+        const nowTs = state.lastActive || 0;
+        if (remTs < nowTs) return;
+        SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
+        migrateTaskList(state.tasks);
+        localStorage.setItem(LS, JSON.stringify(state));
+        renderAll();
       });
     });
 
