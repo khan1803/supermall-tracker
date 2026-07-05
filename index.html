@@ -972,7 +972,6 @@ function load() {
     const d = JSON.parse(localStorage.getItem(LS));
     if (d) state = Object.assign(state, d);
   } catch (e) {}
-  if (!state.team.length && !state.tasks.length) seed();
   state.tasks.forEach(t => {
     if (typeof t.who === "string") t.who = [t.who];
     if (t.cat === "personal") t.cat = "work";
