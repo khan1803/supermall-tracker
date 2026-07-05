@@ -901,25 +901,58 @@ const FIREBASE_CONFIG = {
 const SHARED_KEYS = ['tasks', 'team', 'updates', 'streak', 'lastActive'];
 let dbRef = null, isRemoteUpdate = false;
 
-function initFirebase() {
-  try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    dbRef = firebase.database().ref('supermall-tracker');
-    dbRef.on('value', snap => {
-      const data = snap.val();
-      if (!data) return;
-      isRemoteUpdate = true;
-      SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
-      // migrate
-      state.tasks.forEach(t => {
+function migrateTaskList(tasks) {
+  (tasks || []).forEach(t => {
     if (typeof t.who === "string") t.who = [t.who];
     if (t.cat === "personal") t.cat = "work";
     if (t.status === "open") t.status = (t.taskUpdates && t.taskUpdates.length) ? "in-progress" : "not-picked";
   });
-      localStorage.setItem(LS, JSON.stringify(state));
-      renderAll();
-      isRemoteUpdate = false;
+}
+
+function initFirebase() {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    dbRef = firebase.database().ref('supermall-tracker');
+
+    // One-time read: decide whether local or remote wins, then start live listener
+    dbRef.once('value', snap => {
+      const remote = snap.val();
+      const localTs  = state.lastActive || 0;
+      const remoteTs = (remote && remote.lastActive) || 0;
+      const localLen  = (state.tasks || []).length;
+      const remoteLen = (remote && remote.tasks) ? remote.tasks.length : 0;
+
+      if (remote && (remoteTs > localTs || (!localTs && remoteLen > localLen))) {
+        // Firebase is newer — load it
+        SHARED_KEYS.forEach(k => { if (remote[k] !== undefined) state[k] = remote[k]; });
+        migrateTaskList(state.tasks);
+        localStorage.setItem(LS, JSON.stringify(state));
+        renderAll();
+      } else if (localLen > 0) {
+        // Local is newer or has more data — push to Firebase
+        const shared = {};
+        SHARED_KEYS.forEach(k => shared[k] = state[k]);
+        dbRef.set(shared).catch(e => console.warn('Firebase write failed:', e));
+      }
+
+      // Live listener for changes from OTHER devices
+      dbRef.on('value', snap => {
+        if (isRemoteUpdate) return;
+        const data = snap.val();
+        if (!data) return;
+        // Only apply if remote is genuinely newer than what we have now
+        const nowTs = state.lastActive || 0;
+        const remTs = data.lastActive || 0;
+        if (remTs <= nowTs && (data.tasks || []).length <= (state.tasks || []).length) return;
+        isRemoteUpdate = true;
+        SHARED_KEYS.forEach(k => { if (data[k] !== undefined) state[k] = data[k]; });
+        migrateTaskList(state.tasks);
+        localStorage.setItem(LS, JSON.stringify(state));
+        renderAll();
+        isRemoteUpdate = false;
+      });
     });
+
     firebase.database().ref('.info/connected').on('value', snap => setSyncStatus(snap.val()));
   } catch (e) { console.warn('Firebase init failed:', e.message); }
 }
